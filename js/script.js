@@ -59,6 +59,11 @@
 
       success: function(match) {
         var matchMap = match.MapId;
+        console.log(match);
+
+        // $.each(match.PlayerStats, function(i, player) {
+        //   console.log(this);
+        // });
 
         // Map details aren't available from an API call for recent matches
         // or Carnage Reports, so instead we'll store the Map details in 
@@ -91,7 +96,7 @@
 
           case "c8d69870-f206-11e4-b477-24be05e24f7e":
             var map = "Escape from A.R.C";
-            var imageURL = "https://content.halocdn.com/media/Default/games/halo-5-guardians/map-images/warzone/arc-f3f60a132fa746899ce9c2d340152ddb.jpg"''
+            var imageURL = "https://content.halocdn.com/media/Default/games/halo-5-guardians/map-images/warzone/arc-f3f60a132fa746899ce9c2d340152ddb.jpg";
           break;
         }
         
