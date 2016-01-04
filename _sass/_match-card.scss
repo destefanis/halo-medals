@@ -1,0 +1,72 @@
+/**
+ * Halo Medals specific styles.
+ */
+
+.match-card {
+  position: relative;
+  height: 360px;
+  margin-bottom: 2px;
+  border-radius: 2px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.match-card__title {
+  padding: 20px;
+  color: $white;
+  font-size: 2.8rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.match-card-header {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.medal-list {
+  margin: 0;
+  text-align: center;
+}
+
+.medal-list__item {
+  display: inline-block;
+  width: 15.33%;
+  padding: 15px;
+  text-align: center;
+  background-repeat: no-repeat;
+}
+
+.medal-list__item-content {
+  min-height: 140px;
+  position: relative;
+}
+
+.medal__icon {
+  height: 74px;
+  width: 74px;
+  margin: auto;
+}
+
+.medal__name {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  margin: 8px 0;
+  height: 34px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9em;
+}
+
+.medal__count {
+  display: block;
+  width: 100%;
+  margin: auto;
+  font-weight: 300;
+}

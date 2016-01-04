@@ -5,6 +5,10 @@
 (function ($) {
   'use strict'
 
+  $('.js-button').click(function() {
+    console.log("clicked");
+    fetchMaps();
+  });
   // Fetch the list of maps available in the game. We need this data
   // to compare our match Map ID to it's corresponding map later on.
   function fetchMaps() {
@@ -18,12 +22,12 @@
       dataType: "json",
 
       success: function(map_data) {
-        fetchMatches(map_data);
+        fetchMedals(map_data);
       }
     })
   }
 
-  function fetchMedals() {
+  function fetchMedals(map_data) {
     $.jsonp({
       url: "https://www.haloapi.com/metadata/h5/metadata/medals",
       beforeSend: function(xhrObj) {
@@ -35,12 +39,13 @@
 
       success: function(medal_data) {
         console.log(medal_data);
+        fetchMatches(map_data, medal_data);
       }
     })
   }
 
   // Fetch the match history for the entered gamertag.
-  function fetchMatches(map_data) {
+  function fetchMatches(map_data, medal_data) {
 
     $.jsonp({
       url: "https://www.haloapi.com/stats/h5/players/shesjustaglitch/matches?modes=warzone&start=0&count=3",
@@ -51,7 +56,7 @@
       type: "GET",
       dataType: "json",
       success: function(matchHistory) {
-        DetermineMatchType(matchHistory, map_data);
+        DetermineMatchType(matchHistory, map_data, medal_data);
       }
     })
     .done(function(data) {
@@ -64,7 +69,7 @@
 
   // Determine the game mode for each match so we make the proper API
   // call for retreiving the match information.
-  function DetermineMatchType(matchHistory, map_data) {
+  function DetermineMatchType(matchHistory, map_data, medal_data) {
 
     // Loop through recent matches.
     $.each(matchHistory.Results, function() {
@@ -77,13 +82,13 @@
       }
       else if (gameMode === 4) {
         //console.log('warzone');
-        FetchMatchDetails(matchId, map_data);
+        FetchMatchDetails(matchId, map_data, medal_data);
       }
     });
   }
 
   // Fetch the match information.
-  function FetchMatchDetails(matchId, map_data) {
+  function FetchMatchDetails(matchId, map_data, medal_data) {
     $.jsonp({
       url: "https://www.haloapi.com/stats/h5/warzone/matches/" + matchId,
       beforeSend: function(xhrObj) {
@@ -96,14 +101,21 @@
       success: function(match) {
         var matchMap = match.MapId;
         var maps = map_data;
+        var medals = medal_data;
+        var medalsEarned = [];
 
         // Loop through the list of maps we retrevied earlier
         // and compare our match id to each map, if it matches,
         // we set our map name and set our image.
         $.each(maps, function() {
           if (matchMap === this.id) {
-            console.log(this.name);
-            console.log(this.imageUrl);
+            match.MapName = this.name;
+            match.MatchImage = this.imageUrl;
+            match.id = matchId;
+            console.log(match);
+            
+            var matchCardTemplate = _.template($("#match-card").html());
+            $("#recent-matches").append(matchCardTemplate({match: match}));
           }
         })
 
@@ -113,13 +125,35 @@
           if (this.Player.Gamertag === "Shesjustaglitch") {
             console.log(this);
             console.log(this.TotalSpartanKills);
+
+            // Loop through the medals the player earned in this match.
+            $.each(this.MedalAwards, function(i, medal) {
+
+              // Medals in the Medal Array have ID's that are strings,
+              // where in the post carnage results they're ints, so we need
+              // to do a type conversion.
+              var medalId = medal.MedalId;
+              var Medalnum = medalId.toString();
+              
+              // Match the medal from our post game results to the medal array,
+              // using the medal id.
+              var result = _.findWhere(medals, {id: Medalnum});
+              // Include the amount of times this medal was earned in the match.
+              result.count = medal.Count;
+              // Add all the medal objects to an array that we can loop through
+              // in our template.
+              medalsEarned.push(result);
+            })
           }
         })
+
+        var tableTemplate = _.template($("#medal-list").html());
+        var medalList = "#" + match.id;
+        $(medalList).append(tableTemplate({medalsEarned: medalsEarned}));
       }
     })
   }
 
-  fetchMaps();
-  fetchMedals();
+  //var matchCard = _.template("<h1>Some text: <%= foo %></h1>");
 
 })(jQuery);
