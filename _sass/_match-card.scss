@@ -2,20 +2,35 @@
  * Halo Medals specific styles.
  */
 
+
+//#ebebed
+//#1e2333
+//#131828
+
+$black: #131828;
+$off-blue: #1e2333;
+
+.match-card-wrapper {
+  background: #ebebed;
+  margin-bottom: 0.5em;
+}
+
 .match-card {
   position: relative;
   height: 360px;
   margin-bottom: 2px;
-  border-radius: 2px;
+  border-radius: 3px 3px 0 0;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  border-bottom: 3px solid $off-blue;
 }
 
 .match-card__title {
-  padding: 20px;
+  margin-bottom: 0;
+  padding: 20px 30px 0 30px;
   color: $white;
-  font-size: 2.8rem;
+  font-size: 2rem;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -26,12 +41,26 @@
   width: 100%;
   left: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba($black, 0.7);
+}
+
+.match-card__match-type {
+  padding-left: 30px;
+  font-size: 1em;
+  font-weight: 300;
+  color: $white;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .medal-list {
   margin: 0;
+  padding: 1em 0 1em;
   text-align: center;
+}
+
+.medal-content {
+  height: 34px;
 }
 
 .medal-list__item {
@@ -58,15 +87,17 @@
   vertical-align: top;
   width: 100%;
   margin: 8px 0;
-  height: 34px;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 0.9em;
+  line-height: 20px;
+  font-weight: 300;
 }
 
 .medal__count {
   display: block;
   width: 100%;
   margin: auto;
+  padding-top: 4px;
   font-weight: 300;
 }

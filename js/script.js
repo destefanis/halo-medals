@@ -81,16 +81,17 @@
         //console.log('arena');
       }
       else if (gameMode === 4) {
-        //console.log('warzone');
-        FetchMatchDetails(matchId, map_data, medal_data);
+        gameMode = "warzone";
+        FetchMatchDetails(matchId, map_data, medal_data, gameMode);
       }
     });
   }
 
   // Fetch the match information.
-  function FetchMatchDetails(matchId, map_data, medal_data) {
+  function FetchMatchDetails(matchId, map_data, medal_data, gameMode) {
+
     $.jsonp({
-      url: "https://www.haloapi.com/stats/h5/warzone/matches/" + matchId,
+      url: "https://www.haloapi.com/stats/h5/" + gameMode + "/matches/" + matchId,
       beforeSend: function(xhrObj) {
         // Request headers
         xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
@@ -100,19 +101,23 @@
 
       success: function(match) {
         var matchMap = match.MapId;
-        var maps = map_data;
         var medals = medal_data;
+        var recentMatches = [];
         var medalsEarned = [];
 
         // Loop through the list of maps we retrevied earlier
         // and compare our match id to each map, if it matches,
         // we set our map name and set our image.
-        $.each(maps, function() {
+        $.each(map_data, function() {
           if (matchMap === this.id) {
             match.MapName = this.name;
+            match.MatchType = gameMode;
             match.MatchImage = this.imageUrl;
             match.id = matchId;
+
             console.log(match);
+
+            recentMatches.push(match);
             
             var matchCardTemplate = _.template($("#match-card").html());
             $("#recent-matches").append(matchCardTemplate({match: match}));
@@ -125,6 +130,8 @@
           if (this.Player.Gamertag === "Shesjustaglitch") {
             console.log(this);
             console.log(this.TotalSpartanKills);
+            recentMatches.player = this;
+            console.log(recentMatches.player);
 
             // Loop through the medals the player earned in this match.
             $.each(this.MedalAwards, function(i, medal) {

@@ -5,8 +5,12 @@
         <div class="medal-list__item-content">
           <div class="medal__icon" style = "background-image: url('<%= medal.spriteLocation.spriteSheetUri %>'); background-size: auto; background-position: -<%= medal.spriteLocation.left %>px -<%= medal.spriteLocation.top %>px; background-origin: content-box;">
           </div>
-          <span class="medal__name"><%= medal.name %></span>
-          <span class="medal__count"><%= medal.count %></span>
+          <div class="medal-content">
+            <span class="medal__name">
+              <%= medal.name %>
+              <span class="medal__count"><%= medal.count %></span>
+            </span>
+          </div>
         </div>
       </li>
   <% }); %>
