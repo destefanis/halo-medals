@@ -14,18 +14,26 @@ $spacing-unit:     30px;
 
 // Color Variables
 $white: #fff;
-$text-color: #111;
-$background-color: #fdfdfd;
-$brand-color: #2a7ae2;
+$black: #131828;
+$primary: #5DFDCB;
+$secondary: #5A5A66;
+$dark-gray: #50514f;
+$gray: #EFEFF0;
+$visor-color: #FDB813;
+
+$text-color: $black;
+$background-color: $white;
+$brand-color: $primary;
 
 $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
 $grey-color-dark:  darken($grey-color, 25%);
 
 // Width of the content area
-$content-width:    800px;
-$on-palm:          600px;
-$on-laptop:        800px;
+$content-width: 800px;
+$on-mobile: 480px;
+$on-palm: 640px;
+$on-laptop: 800px;
 
 
 // Use media queries like this:
@@ -44,7 +52,9 @@ $on-laptop:        800px;
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
   "base",
+  "app",
   "layout",
   "match-card",
+  "preloader",
   "syntax-highlighting"
 ;

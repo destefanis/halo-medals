@@ -8,9 +8,19 @@
     {% include header.html %}
 
     <div class="page-content">
-      <div class="wrapper">
-        {{ content }}
-        <div id="recent-matches" class="recent-matches"></div>
+      <div class="app-header" style="background-image: url('https://content.halocdn.com/media/Default/community/blogs/art-team-drop/A-Concept/h5-guardians-concept-art-18-1920x1080-06343794e088434d865932d068a02f62.jpg');">
+        <div class="app-header__overlay">
+          <div class="wrapper">
+            {% include preloader.html %}
+
+            {% include app_form.html %}
+          </div>
+        </div>
+      </div>
+      <div class="page__matches">
+        <div class="wrapper">
+          <div id="recent-matches" class="recent-matches"></div>
+        </div>
       </div>
     </div>
 

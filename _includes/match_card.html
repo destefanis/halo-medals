@@ -1,14 +1,30 @@
 
 <script type="text/html" id='match-card'>
   <div class="match-card-wrapper">
-    <div class="match-card" style = "background-image:url('<%= match.MatchImage %>');">
+    <div class="match-card" data-id = "<%= match.id %>" style = "background-image:url('<%= match.MatchImage %>');">
       <header class="match-card-header">
         <h2 class="match-card__title">
           <%= match.MapName %>
         </h2>
-        <h6 class="match-card__match-type">
-          <%= match.MatchType %>
-        </h6>
+        <div class="match-card__details">
+          <h6 class="match-card__match-type">
+            <%= match.MatchType %>
+          </h6>
+          <ul class="stats__list">
+            <li class="stats__list-item">
+              KDA: 
+            </li>
+            <li class="stats__list-item">
+              <%= match.player.TotalSpartanKills %> |
+            </li>
+            <li class="stats__list-item">
+              <%= match.player.TotalAssists %> |
+            </li>
+            <li class="stats__list-item">
+              <%= match.player.TotalDeaths %>
+            </li>
+          </ul>
+        </div>
       </header>
     </div>
     <ul id = "<%= match.id %>" class="medal-list">

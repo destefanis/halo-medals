@@ -1,0 +1,103 @@
+/**
+ * Preloader Styles
+ */
+
+.preloader {
+  position: relative;
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.preloader__icon {
+  position: relative;
+  z-index: 10;
+  height: 124px;
+  width: 124px;
+}
+
+.preloader__icon-visor {
+  stroke-opacity: 0.4;
+}
+
+.preloader__message-container {
+  text-align: center;
+}
+
+.preloader__message {
+  display: inline-block;
+  margin: auto;
+  background: rgba($primary, 0.7);
+  transition: all 0.3s ease;
+  text-align: center;
+  color: $white;
+  font-size: 1em;
+  padding: 0;
+  font-weight: 300;
+  font-style: italic;
+  border-radius: 3px;
+
+  &.has-message {
+    padding: 1em;
+    margin: 0.5em 0 1em;
+  }
+}
+
+.preloader__background {
+  position: absolute;
+  z-index: 2;
+  top: 34%;
+  right: 45%;
+  width: 74px;
+  height: 38px;
+  content: '';
+  background: rgba($visor-color, 1);
+
+  @include media-query($on-palm) {
+    right: 44%;
+  }
+
+  @include media-query($on-mobile) {
+    right: 40%;
+  }
+}
+
+.preloader__circle {
+  position: absolute;
+  left: 39%;
+  bottom: -9%;
+  z-index: 1;
+  height: 164px;
+  width: 164px;
+  border-radius: 50%;
+  background: $gray;
+
+  @include media-query($on-palm) {
+    left: 36.5%;
+  }
+
+  @include media-query($on-mobile) {
+    left: 28%;
+  }
+}
+
+.is--loading {
+  -webkit-animation: loading_animation 2s linear infinite;
+  -moz-animation: loading_animation 2s linear infinite;
+  -o-animation: loading_animation 2s linear infinite;
+  animation: loading_animation 2s linear infinite;
+}
+
+@keyframes loading_animation {
+
+  0% {
+    background: rgba($primary, 1);
+  }
+
+  50% {
+    background: rgba($primary, 0.5);
+  }
+
+  100% {
+    background: rgba($primary, 1);
+  }
+}
