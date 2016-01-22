@@ -3,6 +3,7 @@
  */
 
 .app-header {
+  transition: all 0.3s ease;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -13,9 +14,9 @@
 }
 
 .landing-content {
-  padding: 2em 0;
+  padding: 1.5em 0 2em;
   text-align: center;
-  background-color: rgba($secondary, 0.7);
+  background-color: rgba($secondary, 0.9);
 
   @include media-query($on-palm) {
     text-align: left;
@@ -70,7 +71,7 @@ select::-ms-expand {
 
 .input-field {
   width: 40%;
-  padding: 1.5em 1.5em 1em 0.75em;
+  padding: 1.5em 1.5em 0.75em 0.75em;
   background: transparent;
   border: 0;
   color: $white;
