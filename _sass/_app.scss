@@ -10,7 +10,11 @@
 
 .app-header__overlay {
   background-color: rgba($black, 0.7);
-  padding: 4em 0 6em;
+  padding: 4em 0 3em;
+
+  @include media-query($on-palm) {
+    padding: 2em 0 2em;
+  }
 }
 
 .landing-content {
@@ -20,13 +24,14 @@
 
   @include media-query($on-palm) {
     text-align: left;
+    padding: 1em 15px 1.5em;
   }
 }
 
 .select-container {
   position: relative;
   display: inline-block;
-  margin: 0 1em 0 1em;
+  margin: 0 1em;
 }
 
 .select {
@@ -70,7 +75,8 @@ select::-ms-expand {
 }
 
 .input-field {
-  width: 40%;
+  transition: all 0.25s ease;
+  width: 44%;
   padding: 1.5em 1.5em 0.75em 0.75em;
   background: transparent;
   border: 0;
@@ -81,10 +87,106 @@ select::-ms-expand {
   font-family: $base-font-family;
   letter-spacing: 1px;
 
+  &:focus {
+    outline: none;
+
+    &::-webkit-input-placeholder {
+      color: $primary;
+    }
+  }
+
   @include media-query($on-palm) {
     width: 80%;
     margin-left: 1em;
     margin-bottom: 1.5em;
+  }
+}
+
+.description-box {
+  transition: all 0.35s ease;
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  padding: 1em 0;
+  background: $secondary;
+  color: $white;
+  height: 0;
+  bottom: -80px;
+
+  @include media-query($on-palm) {
+    text-align: left;
+    padding-left: 15px;
+  }
+
+  &.is-visible {
+    height: auto;
+    bottom: 0;
+  }
+
+  &.is-loading {
+    color: $primary;
+  }
+}
+
+.description-box__name {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.description-box__description {
+  padding-left: 0.5em;
+  font-weight: 300;
+
+  @include media-query($on-palm) {
+    display: block;
+    padding-left: 0;
+  }
+}
+
+.page__controls {
+  display: none;
+  height: 60px;
+  text-align: center;
+
+  &.is-visible {
+    display: block;
+  }
+}
+
+.message-close {
+  transition: all 0.25s ease;
+  position: absolute;
+  display: inline-block;
+  padding-top: 3px;
+  font-size: 0.76em;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  right: 30px;
+  color: $white;
+  cursor: pointer;
+
+  @include media-query($on-palm) {
+    display: block;
+    position: static;
+    padding-top: 6px;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $primary;
+
+    svg {
+      fill: $primary;
+    }
+  }
+
+  svg {
+    transition: all 0.25s ease;
+    height: 0.76em;
+    width: 0.76em;
+    fill: $white;
   }
 }
 
@@ -111,3 +213,25 @@ select::-ms-expand {
     text-decoration: none;
   }
 }
+
+.button--load-more {
+  &:link,
+  &:visited {
+    background: $primary;
+    color: $white;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: $secondary;
+  }
+}
+
+// .button--reset {
+//   &:link,
+//   &:visited {
+//     border-color: $visor-color;
+//     color: $visor-color;
+//   }
+// }

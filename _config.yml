@@ -7,12 +7,12 @@
 
 # Site settings
 title: Halo Medals
-email: your-email@domain.com
+email: info@halomedals.io
 description: Review the medals you earned after each Halo match.
 baseurl: "/halo-medals" # the subpath of your site, e.g. /blog
 url: "http://destefanis.github.io/" # the base hostname & protocol for your site
 twitter_username: jekyllrb
-github_username:  jekyll
+github_username:  destefanis
 
 # Build settings
 markdown: kramdown

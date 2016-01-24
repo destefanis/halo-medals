@@ -4,8 +4,13 @@
 
 .preloader {
   position: relative;
-  margin-bottom: 2em;
+  margin-top: 1em;
+  margin-bottom: 3em;
   text-align: center;
+
+  @include media-query($on-palm) {
+    margin-bottom: 2em;
+  }
 }
 
 .preloader__icon {
@@ -24,7 +29,7 @@
 }
 
 .preloader__message {
-  display: inline-block;
+  display: block;
   margin: auto;
   background: rgba($primary, 0.7);
   transition: all 0.3s ease;
@@ -34,7 +39,8 @@
   padding: 0;
   font-weight: 300;
   font-style: italic;
-  border-radius: 3px;
+  border-radius: 1px;
+  letter-spacing: 1px;
 
   &.has-message {
     padding: 1em;
@@ -69,7 +75,7 @@
   height: 164px;
   width: 164px;
   border-radius: 50%;
-  background: $gray;
+  background: $white;
 
   @include media-query($on-palm) {
     left: 36.5%;

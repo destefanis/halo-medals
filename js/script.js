@@ -18,6 +18,7 @@
   var resultCount = 0;
   var appCount = 0;
 
+
   // When the input field is updated, we need to set that value
   // to the gamertag, and replace spaces with plus characters so the gamertag
   // can be passed into the request URL.
@@ -32,23 +33,27 @@
     e.preventDefault();
 
     // Update the preloader.
-    $('.preloader__background').addClass('is--loading');
-    $('.preloader__message').addClass('has-message');
-    $('.preloader__message').text("Fetching Recent Matches");
+    $('.description-box').addClass('is-visible');
+    $('.description-box__name').html("Status");
+    $('.description-box__description').html("Searching for recent matches.");
     selectedMode = $('.select').val();
-    // Fetch Maps
-    fetchMaps();
+
+    if ($('#gamertag-field').val() === '') {
+      $('.description-box__name').html("Error");
+      $('.description-box__description').html("Gamertag field empty!");
+    } 
+    else {
+      fetchMaps();
+      $('.preloader__background').addClass('is--loading');
+    }
   });
 
-  // Fetch the list of maps available in the game. We need this data
-  // to compare our match Map ID to it's corresponding map later on.
+
   function fetchMaps() {
-    $.jsonp({
-      url: "https://www.haloapi.com/metadata/h5/metadata/maps",
-      beforeSend: function(xhrObj) {
-        // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
-      },
+    // Fetch the list of maps available in the game. We need this data
+    // to compare our match Map ID to it's corresponding map later on.
+    $.ajax({
+      url: "http://www.halomedals.io/json/maps.json",
       type: "GET",
       dataType: "json",
 
@@ -58,13 +63,10 @@
     })
   }
 
+
   function fetchMedals(map_data) {
-    $.jsonp({
-      url: "https://www.haloapi.com/metadata/h5/metadata/medals",
-      beforeSend: function(xhrObj) {
-        // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
-      },
+    $.ajax({
+      url: "http://www.halomedals.io/json/medals.json",
       type: "GET",
       dataType: "json",
 
@@ -74,9 +76,9 @@
     })
   }
 
-  // Fetch the match history for the entered gamertag.
+
   function fetchMatches(map_data, medal_data) {
-    //var startCount = resultCount.toString();
+    // Fetch the match history for the entered gamertag.
 
     $.jsonp({
       url: "https://www.haloapi.com/stats/h5/players/" + safeGamertag + "/matches?modes=" + selectedMode + "&start=" + resultCount + "&count=3",
@@ -90,24 +92,33 @@
 
         DetermineMatchType(matchHistory, map_data, medal_data);
 
-        // Add 5 to the result count each time this method is run so that
+        // Add 3 to the result count each time this method is run so that
         // the same matches aren't repeated.
         resultCount = resultCount + 3;
-        $('.preloader__message').text("Recent Matches Found");
-      }
-    })
-    .done(function(data) {
-      console.log("Success");
+        $('.description-box').addClass('is-loading');
+        $('.description-box__name').html("Success");
+        $('.description-box__description').html("Recent Matches Found");
+      },
+      statusCode: {
+        429: function() {
+          $('.description-box__name').html("Error");
+          $('.description-box__description').html("Maxmium API calls reached due to traffic. Please try again in 10 seconds.");
+          $('.preloader__background').removeClass('is--loading');
+        }
+      } 
+
     })
     .fail(function() {
-      console.log("Call not successful.");
-      $('.preloader__message').text("Error: An error occured and the attempt to fetch messages wasn't successful. Please try again.");
+      $('.description-box__name').html("Error");
+      $('.description-box__description').html("The attempt to fetch recent matches wasn't successful, please try again.");
+      $('.preloader__background').removeClass('is--loading');
     });
   }
 
-  // Determine the game mode for each match so we make the proper API
-  // call for retreiving the match information.
+
   function DetermineMatchType(matchHistory, map_data, medal_data) {
+    // Determine the game mode for each match so we make the proper API
+    // call for retreiving the match information.
 
     // Loop through recent matches.
     $.each(matchHistory.Results, function() {
@@ -126,7 +137,7 @@
     });
   }
 
-  // Fetch the match information.
+
   function FetchMatchDetails(matchId, map_data, medal_data, gameMode) {
 
     $.jsonp({
@@ -171,7 +182,9 @@
                 match.player = this;
               }
               else {
-                $('.preloader__message').text("There's an issue with your Gamertag, make sure it's entered correclty and try again.");
+                $('.description-box').removeClass("is-loading");
+                $('.description-box__name').html("Error");
+                $('.description-box__description').html("There's an issue with your Gamertag, make sure it's entered correclty and try again.");
               }
             })
 
@@ -185,89 +198,107 @@
 
         $.each(recentMatches, function(i, val) {
 
-          $.jsonp({
-            url: "https://www.haloapi.com/metadata/h5/metadata/map-variants/" + val.MapVariantId,
-            beforeSend: function(xhrObj) {
-              // Request headers
-              xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
-            },
-            type: "GET",
-            dataType: "json",
+          // Declare our Underscores template for our match card.
+          var matchCardTemplate = _.template($("#match-card").html());
 
-            success: function(map_variant_data) {
-              val.Name = map_variant_data.name;
-              var matchCardTemplate = _.template($("#match-card").html());
-              $("#recent-matches").append(matchCardTemplate({match: val}));
+          // Breakout Maps are actually all variants built off the same
+          // base map. So we need to check what the variant is, otherwise
+          // it just dispays as "Breakout Arena".
+          if (val.MapId === "c7edbf0f-f206-11e4-aa52-24be05e24f7e") {;
+            $.jsonp({
+              url: "https://www.haloapi.com/metadata/h5/metadata/map-variants/" + val.MapVariantId,
+              beforeSend: function(xhrObj) {
+                // Request headers
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
+              },
+              type: "GET",
+              dataType: "json",
 
-              // Loop through the medals the player earned in this match.
-              $.each(match.player.MedalAwards, function(i, medal) {
+              success: function(map_variant_data) {
+                // Our Map name is actually the name of the variant.
+                val.Name = map_variant_data.name;
+                $("#recent-matches").append(matchCardTemplate({match: val}));
+              }
+            })
+          }
+          else {
+            val.Name = val.MapName;
+            $("#recent-matches").append(matchCardTemplate({match: val}));
+          }
 
-                // Medals in the Medal Array have ID's that are strings,
-                // where in the post carnage results they're ints, so we need
-                // to do a type conversion.
-                var medalId = medal.MedalId;
-                var Medalnum = medalId.toString();
-                
-                // Match the medal from our post game results to the medal array,
-                // using the medal id.
-                var result = _.findWhere(medals, {id: Medalnum});
+          // Show the load more button
+          $('.page__controls').addClass('is-visible');
 
-                // Include the amount of times this medal was earned in the match.
-                result.count = medal.Count;
+          // Loop through the medals the player earned in this match.
+          $.each(match.player.MedalAwards, function(i, medal) {
 
-                // Add all the medal objects to an array that we can loop through
-                // in our template.
-                medalsEarned.push(result);
-              })
+            // Medals in the Medal Array have ID's that are strings,
+            // where in the post carnage results they're ints, so we need
+            // to do a type conversion.
+            var medalId = medal.MedalId;
+            var Medalnum = medalId.toString();
+            
+            // Match the medal from our post game results to the medal array,
+            // using the medal id.
+            var result = _.findWhere(medals, {id: Medalnum});
 
-              // Append the medals to the match card.
-              var tableTemplate = _.template($("#medal-list").html());
-              var medalList = "#" + match.id;
-              $(medalList).append(tableTemplate({medalsEarned: medalsEarned}));
-            }
+            // Include the amount of times this medal was earned in the match.
+            result.count = medal.Count;
+
+            // Add all the medal objects to an array that we can loop through
+            // in our template.
+            medalsEarned.push(result);
           })
+
+          // Append the medals to the match card.
+          var tableTemplate = _.template($("#medal-list").html());
+          var medalList = "#" + match.id;
+          $(medalList).append(tableTemplate({medalsEarned: medalsEarned}));
         })
 
+        $('.description-box').removeClass("is-visible is-loading");
         $('.preloader__background').removeClass('is--loading');
-        $('.preloader__message').text("");
-        $('.preloader__message').removeClass('has-message');
-
-        // $("#recent-matches").delegate(".match-card", "click", function (){
-        //  var selectedId = $(this).attr("data-id");
-          
-          // $.each(recentMatches, function(i, match) {
-          //   if (match.id === selectedId) {
-              
-          //     // Loop through the medals the player earned in this match.
-          //     $.each(match.player.MedalAwards, function(i, medal) {
-
-          //       // Medals in the Medal Array have ID's that are strings,
-          //       // where in the post carnage results they're ints, so we need
-          //       // to do a type conversion.
-          //       var medalId = medal.MedalId;
-          //       var Medalnum = medalId.toString();
-                
-          //       // Match the medal from our post game results to the medal array,
-          //       // using the medal id.
-          //       var result = _.findWhere(medals, {id: Medalnum});
-
-          //       // Include the amount of times this medal was earned in the match.
-          //       result.count = medal.Count;
-
-          //       // Add all the medal objects to an array that we can loop through
-          //       // in our template.
-          //       medalsEarned.push(result);
-          //     })
-          //   }
-          // })
-          
-          // Append the medals to the match card.
-          // var tableTemplate = _.template($("#medal-list").html());
-          // var medalList = "#" + match.id;
-          // $(medalList).append(tableTemplate({medalsEarned: medalsEarned}));
-        // })
-      // }
+      },
+      statusCode: {
+        429: function() {
+          $('.description-box__name').html("Error");
+          $('.description-box__description').html("Maxmium API calls reached due to traffic. Please try again in 10 seconds.");
+          $('.preloader__background').removeClass('is--loading');
+        }
+      }
     })
   }
+
+  $('.button--load-more').click(function(e) {
+    e.preventDefault();
+
+    fetchMaps();
+    $('.preloader__background').addClass('is--loading');
+  });
+
+  // Various click events for toggling UI elements.
+  $("#recent-matches").delegate(".match-card", "click", function() {
+    $(this).toggleClass('medals-visible');
+    $(this).next('.match-card__report').toggleClass('is-visible');
+    $('.description-box').removeClass('is-visible');
+  });
+
+  $("#recent-matches").delegate(".close-button", "click", function() {
+    $(this).closest('.match-card__report').removeClass('is-visible');
+    $(this).closest('.match-card__report').prev('.match-card').removeClass('medals-visible');
+    $('.description-box').removeClass('is-visible');
+  });
+
+  $("#recent-matches").delegate(".medal-list__item", "click", function() {
+    var medalModalDescription = $(this).find('.medal-content').attr('data-description');
+    var medalModalName = $(this).find('.medal-content').attr('data-name');
+    $('.description-box').addClass('is-visible');
+    $('.description-box__name').html(medalModalName);
+    $('.description-box__description').html(medalModalDescription);
+  });
+
+  $(".message-close").click(function() {
+    $('.description-box').removeClass('is-visible');
+  });
 
 })(jQuery);

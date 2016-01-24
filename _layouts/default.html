@@ -11,17 +11,30 @@
       <div class="app-header" style="background-image: url('https://content.halocdn.com/media/Default/community/blogs/art-team-drop/A-Concept/h5-guardians-concept-art-18-1920x1080-06343794e088434d865932d068a02f62.jpg');">
         <div class="app-header__overlay">
           <div class="wrapper">
+
             {% include preloader.html %}
 
             {% include app_form.html %}
+
           </div>
         </div>
       </div>
       <div class="page__matches">
         <div class="wrapper">
           <div id="recent-matches" class="recent-matches"></div>
+          <div class="page__controls">
+            <a href="#" class="button button--load-more">
+              Load More Matches
+            </a>
+          </div>
         </div>
       </div>
+    </div>
+
+    <div class="description-box">
+      <span class="description-box__name"></span>:
+      <span class="description-box__description"></span>
+      <span class="message-close">Close {% include close.svg %}</span>
     </div>
 
     {% include footer.html %}

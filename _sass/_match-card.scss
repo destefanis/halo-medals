@@ -3,13 +3,21 @@
  */
 
 .recent-matches {
-  margin-top: -60px;
-  margin-bottom: 60px;
+  margin-top: -36px;
+  margin-bottom: 36px;
+
+  @include media-query($on-palm) {
+    margin-top: -15px;
+  }
 }
 
 .match-card-wrapper {
-  margin-bottom: 0.1em;
+  margin-bottom: 0.5em;
   background: $gray;
+
+  @include media-query($on-palm) {
+    margin-bottom: 15px;
+  }
 }
 
 .match-card {
@@ -37,6 +45,21 @@
       color: $primary;
     }
   }
+
+  &.medals-visible {
+
+    .match-card-header {
+      background: rgba($black, 0.9);
+    }
+
+    .match-card__title {
+      color: $primary;
+    }
+
+    svg {
+      transform: rotate(0deg);
+    }
+  }
 }
 
 .match-card__title {
@@ -50,8 +73,9 @@
   transition: (all 0.3s ease);
 
   @include media-query($on-palm) {
+    padding: 16px 20px 8px;
+    font-size: 1.6em;
     line-height: 1.2;
-    padding-bottom: 20px;
   }
 }
 
@@ -66,12 +90,16 @@
 
 .match-card__details {
   position: relative;
+  padding-left: 30px;
+
+  @include media-query($on-palm) {
+    padding-bottom: 20px;
+    padding-left: 20px;
+  }
 }
 
 .stats__list {
-  position: absolute;
-  top: 0;
-  right: 30px;
+  display: inline-block;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -85,12 +113,96 @@
 }
 
 .match-card__match-type {
-  padding-left: 30px;
+  display: inline-block;
   font-size: 1em;
   font-weight: 300;
   color: $white;
   letter-spacing: 2px;
   text-transform: uppercase;
+
+  @include media-query($on-palm) {
+    margin-bottom: 0;
+  }
+}
+
+.match-card__arrow {
+  position: absolute;
+  top: 0;
+  right: 30px;
+  color: $white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 300;
+
+  @include media-query($on-palm) {
+    right: 30px;
+  }
+
+  svg {
+    position: relative;
+    top: 1px;
+    fill: $white;
+    height: 0.9em;
+    width: 0.9em;
+    transform: rotate(180deg);
+  }
+}
+
+.match-card__report {
+  transition: all 0.25s ease;
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 10px;
+
+  &.is-visible {
+    height: auto;
+  }
+}
+
+.report__medal-count {
+  padding-top: 15px;
+  padding-left: 30px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 1em;
+  font-weight: 300;
+
+  @include media-query($on-palm) {
+    padding-top: 20px;
+    padding-left: 15px;
+  }
+}
+
+.report__close {
+  font-size: 0.76em;
+  text-align: right;
+}
+
+.close-button {
+  display: inline-block;
+  padding: 15px 30px 15px;
+  transition: all 0.25s ease;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 400;
+  cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $secondary;
+
+    svg {
+      fill: $secondary;
+      path: $secondary;
+    }
+  }
+
+  svg {
+    transition: all 0.25s ease;
+    height: 0.76em;
+    width: 0.76em;
+  }
 }
 
 .medal-list {
@@ -107,11 +219,13 @@
 }
 
 .medal-list__item {
+  transition: all 0.3s ease;
   display: inline-block;
   width: 15.33%;
   padding: 15px;
   text-align: center;
   background-repeat: no-repeat;
+  cursor: pointer;
 
   @include media-query($on-palm) {
     width: 19.33%;
@@ -120,6 +234,12 @@
   @include media-query($on-mobile) {
     width: 26.33%;
     padding: 10px;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: rgba($secondary, 0.15);
   }
 }
 
