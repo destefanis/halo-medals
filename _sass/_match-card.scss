@@ -8,6 +8,7 @@
 
   @include media-query($on-palm) {
     margin-top: -15px;
+    margin-bottom: 15px;
   }
 }
 
@@ -24,10 +25,10 @@
   position: relative;
   height: 360px;
   margin-bottom: 2px;
+  border-bottom: 3px solid $black;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  border-bottom: 3px solid $black;
   cursor: pointer;
 
   @include media-query($on-palm) {
@@ -64,26 +65,26 @@
 
 .match-card__title {
   margin-bottom: 0;
-  padding: 20px 30px 0 30px;
+  padding: 20px 30px 0;
   color: $white;
-  font-size: 2rem;
-  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 2px;
+  font-size: 2rem;
+  font-weight: 400;
   transition: (all 0.3s ease);
 
   @include media-query($on-palm) {
     padding: 16px 20px 8px;
-    font-size: 1.6em;
     line-height: 1.2;
+    font-size: 1.6em;
   }
 }
 
 .match-card-header {
   position: absolute;
-  width: 100%;
-  left: 0;
   bottom: 0;
+  left: 0;
+  width: 100%;
   background: rgba($black, 0.7);
   transition: (all 0.3s ease);
 }
@@ -108,17 +109,17 @@
 .stats__list-item {
   display: inline-block;
   color: $white;
-  font-weight: 300;
   letter-spacing: 1px;
+  font-weight: 300;
 }
 
 .match-card__match-type {
   display: inline-block;
+  color: $white;
+  text-transform: uppercase;
+  letter-spacing: 2px;
   font-size: 1em;
   font-weight: 300;
-  color: $white;
-  letter-spacing: 2px;
-  text-transform: uppercase;
 
   @include media-query($on-palm) {
     margin-bottom: 0;
@@ -141,18 +142,18 @@
   svg {
     position: relative;
     top: 1px;
-    fill: $white;
+    transform: rotate(180deg);
     height: 0.9em;
     width: 0.9em;
-    transform: rotate(180deg);
+    fill: $white;
   }
 }
 
 .match-card__report {
-  transition: all 0.25s ease;
   height: 0;
-  overflow: hidden;
   margin-bottom: 10px;
+  overflow: hidden;
+  transition: all 0.25s ease;
 
   &.is-visible {
     height: auto;
@@ -162,8 +163,8 @@
 .report__medal-count {
   padding-top: 15px;
   padding-left: 30px;
-  letter-spacing: 1px;
   text-transform: uppercase;
+  letter-spacing: 1px;
   font-size: 1em;
   font-weight: 300;
 
@@ -174,18 +175,18 @@
 }
 
 .report__close {
-  font-size: 0.76em;
   text-align: right;
+  font-size: 0.76em;
 }
 
 .close-button {
   display: inline-block;
-  padding: 15px 30px 15px;
-  transition: all 0.25s ease;
-  letter-spacing: 1px;
+  padding: 15px 30px;
   text-transform: uppercase;
+  letter-spacing: 1px;
   font-weight: 400;
   cursor: pointer;
+  transition: all 0.25s ease;
 
   &:hover,
   &:active,
@@ -194,14 +195,13 @@
 
     svg {
       fill: $secondary;
-      path: $secondary;
     }
   }
 
   svg {
-    transition: all 0.25s ease;
     height: 0.76em;
     width: 0.76em;
+    transition: all 0.25s ease;
   }
 }
 
@@ -219,13 +219,13 @@
 }
 
 .medal-list__item {
-  transition: all 0.3s ease;
   display: inline-block;
   width: 15.33%;
   padding: 15px;
-  text-align: center;
   background-repeat: no-repeat;
+  text-align: center;
   cursor: pointer;
+  transition: all 0.3s ease;
 
   @include media-query($on-palm) {
     width: 19.33%;
@@ -244,8 +244,8 @@
 }
 
 .medal-list__item-content {
-  min-height: 140px;
   position: relative;
+  min-height: 140px;
 }
 
 .medal__icon {
@@ -256,13 +256,13 @@
 
 .medal__name {
   display: inline-block;
-  vertical-align: top;
   width: 100%;
   margin: 8px 0;
+  vertical-align: top;
   text-transform: uppercase;
+  line-height: 20px;
   letter-spacing: 1px;
   font-size: 0.9em;
-  line-height: 20px;
   font-weight: 300;
 
   @include media-query($on-palm) {

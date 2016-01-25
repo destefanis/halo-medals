@@ -204,7 +204,9 @@
           // Breakout Maps are actually all variants built off the same
           // base map. So we need to check what the variant is, otherwise
           // it just dispays as "Breakout Arena".
-          if (val.MapId === "c7edbf0f-f206-11e4-aa52-24be05e24f7e") {;
+          // @todo, this feature currently requires too many API calls, need
+          // to implement this more effeciently. 
+          if (val.MapId === "SAMPLE-c7edbf0f-f206-11e4-aa52-24be05e24f7e9") {
             $.jsonp({
               url: "https://www.haloapi.com/metadata/h5/metadata/map-variants/" + val.MapVariantId,
               beforeSend: function(xhrObj) {
@@ -299,6 +301,18 @@
 
   $(".message-close").click(function() {
     $('.description-box').removeClass('is-visible');
+  });
+
+  $('.link--with-popup').magnificPopup({
+    type: 'inline',
+    fixedContentPos: false,
+    fixedBgPos: true,
+    overflowY: 'auto',
+    closeBtnInside: true,
+    preloader: false,
+    midClick: true,
+    removalDelay: 300,
+    mainClass: 'my-mfp-zoom-in'
   });
 
 })(jQuery);

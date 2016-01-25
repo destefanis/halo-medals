@@ -1,6 +1,7 @@
 /**
  * Site header
  */
+
 .site-header {
   border-top: 5px solid $grey-color-dark;
   border-bottom: 1px solid $grey-color-light;
@@ -13,13 +14,107 @@
 .site-title {
   transition: all 0.25s ease;
   font-size: 1.3em;
-  font-weight: 900;
+  font-weight: 300;
   letter-spacing: 2px;
-  color: $visor-color;
+  color: $secondary;
   text-transform: uppercase;
   line-height: 56px;
   margin-bottom: 0;
   float: left;
+
+  &:link,
+  &:visited {
+    color: $secondary;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none;
+    color: $visor-color;
+  }
+}
+
+.site-nav {
+  float: right;
+  line-height: 56px;
+
+  .menu-icon {
+    display: none;
+  }
+
+  .navigation-item__link {
+    transition: all 0.25s ease;
+    color: $secondary;
+    line-height: $base-line-height;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: $visor-color;
+      text-decoration: none;
+    }
+  }
+
+  @include media-query($on-palm) {
+    position: absolute;
+    top: 9px;
+    right: $spacing-unit / 2;
+    background-color: $background-color;
+    border-radius: 5px;
+    text-align: right;
+
+    .page-link {
+      display: block;
+      padding: 6px 10px;
+      margin-left: 20px;
+
+      &:not(:last-child) {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+
+/**
+ * Site footer and modal styles.
+ */
+
+.site-footer {
+  padding: $spacing-unit 0;
+  border-top: 1px solid $gray;
+}
+
+.footer__title,
+.modal__title {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modal__body {
+  font-size: 0.76em;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.social-media-list {
+  margin-left: 0;
+  list-style: none;
+}
+
+.social-list__link {
+  display: inline-block;
+  margin-bottom: 4px;
+  transition: all 0.25s ease;
 
   &:link,
   &:visited {
@@ -34,93 +129,8 @@
   }
 }
 
-.site-nav {
-  float: right;
-  line-height: 56px;
-
-  .menu-icon {
-    display: none;
-  }
-
-  .page-link {
-    color: $text-color;
-    line-height: $base-line-height;
-
-      // Gaps between nav items, but not on the last one
-      &:not(:last-child) {
-        margin-right: 20px;
-      }
-    }
-
-    @include media-query($on-palm) {
-      position: absolute;
-      top: 9px;
-      right: $spacing-unit / 2;
-      background-color: $background-color;
-      border: 1px solid $grey-color-light;
-      border-radius: 5px;
-      text-align: right;
-
-      .menu-icon {
-        display: block;
-        float: right;
-        width: 36px;
-        height: 26px;
-        line-height: 0;
-        padding-top: 10px;
-        text-align: center;
-
-        > svg {
-          width: 18px;
-          height: 15px;
-
-          path {
-            fill: $grey-color-dark;
-          }
-        }
-      }
-
-      .trigger {
-        clear: both;
-        display: none;
-      }
-
-      &:hover .trigger {
-        display: block;
-        padding-bottom: 5px;
-      }
-
-      .page-link {
-        display: block;
-        padding: 5px 10px;
-
-        &:not(:last-child) {
-          margin-right: 0;
-        }
-        margin-left: 20px;
-      }
-    }
-  }
-
-
-
-/**
- * Site footer
- */
- .site-footer {
-  border-top: 1px solid $grey-color-light;
-  padding: $spacing-unit 0;
-}
-
-.footer-heading {
-  font-size: 18px;
-  margin-bottom: $spacing-unit / 2;
-}
-
-.contact-list,
-.social-media-list {
-  list-style: none;
-  margin-left: 0;
+.username {
+  padding-top: 1px;
 }
 
 .footer-col-wrapper {
@@ -136,32 +146,14 @@
   padding-left: $spacing-unit / 2;
 }
 
-.footer-col-1 {
-  width: -webkit-calc(35% - (#{$spacing-unit} / 2));
-  width:         calc(35% - (#{$spacing-unit} / 2));
+.footer-col-2up {
+  width: -webkit-calc(50% - (#{$spacing-unit} / 2));
+  width: calc(50% - (#{$spacing-unit} / 2));
 }
 
-.footer-col-2 {
-  width: -webkit-calc(20% - (#{$spacing-unit} / 2));
-  width:         calc(20% - (#{$spacing-unit} / 2));
-}
-
-.footer-col-3 {
-  width: -webkit-calc(45% - (#{$spacing-unit} / 2));
-  width:         calc(45% - (#{$spacing-unit} / 2));
-}
-
-@include media-query($on-laptop) {
-  .footer-col-1,
-  .footer-col-2 {
-    width: -webkit-calc(50% - (#{$spacing-unit} / 2));
-    width:         calc(50% - (#{$spacing-unit} / 2));
-  }
-
-  .footer-col-3 {
-    width: -webkit-calc(100% - (#{$spacing-unit} / 2));
-    width:         calc(100% - (#{$spacing-unit} / 2));
-  }
+.footer-col-1up {
+  width: -webkit-calc(100% - (#{$spacing-unit} / 2));
+  width: calc(100% - (#{$spacing-unit} / 2));
 }
 
 @include media-query($on-palm) {
@@ -172,74 +164,3 @@
   }
 }
 
-
-
-/**
- * Page content
- */
-
- .post-list {
-  margin-left: 0;
-  list-style: none;
-
-  > li {
-    margin-bottom: $spacing-unit;
-  }
-}
-
-.post-meta {
-  font-size: $small-font-size;
-  color: $grey-color;
-}
-
-.post-link {
-  display: block;
-  font-size: 24px;
-}
-
-
-
-/**
- * Posts
- */
- .post-header {
-  margin-bottom: $spacing-unit;
-}
-
-.post-title {
-  font-size: 42px;
-  letter-spacing: -1px;
-  line-height: 1;
-
-  @include media-query($on-laptop) {
-    font-size: 36px;
-  }
-}
-
-.post-content {
-  margin-bottom: $spacing-unit;
-
-  h2 {
-    font-size: 32px;
-
-    @include media-query($on-laptop) {
-      font-size: 28px;
-    }
-  }
-
-  h3 {
-    font-size: 26px;
-
-    @include media-query($on-laptop) {
-      font-size: 22px;
-    }
-  }
-
-  h4 {
-    font-size: 20px;
-
-    @include media-query($on-laptop) {
-      font-size: 18px;
-    }
-  }
-}

@@ -31,31 +31,31 @@
 .preloader__message {
   display: block;
   margin: auto;
-  background: rgba($primary, 0.7);
-  transition: all 0.3s ease;
-  text-align: center;
-  color: $white;
-  font-size: 1em;
   padding: 0;
+  border-radius: 1px;
+  background: rgba($primary, 0.7);
+  color: $white;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 1em;
   font-weight: 300;
   font-style: italic;
-  border-radius: 1px;
-  letter-spacing: 1px;
+  transition: all 0.3s ease;
 
   &.has-message {
-    padding: 1em;
     margin: 0.5em 0 1em;
+    padding: 1em;
   }
 }
 
 .preloader__background {
+  content: '';
   position: absolute;
-  z-index: 2;
   top: 34%;
   right: 45%;
-  width: 74px;
+  z-index: 2;
   height: 38px;
-  content: '';
+  width: 74px;
   background: rgba($visor-color, 1);
 
   @include media-query($on-palm) {
@@ -69,8 +69,8 @@
 
 .preloader__circle {
   position: absolute;
-  left: 39%;
   bottom: -9%;
+  left: 39%;
   z-index: 1;
   height: 164px;
   width: 164px;
@@ -87,9 +87,9 @@
 }
 
 .is--loading {
-  -webkit-animation: loading_animation 2s linear infinite;
   -moz-animation: loading_animation 2s linear infinite;
   -o-animation: loading_animation 2s linear infinite;
+  -webkit-animation: loading_animation 2s linear infinite;
   animation: loading_animation 2s linear infinite;
 }
 

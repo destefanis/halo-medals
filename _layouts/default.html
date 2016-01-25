@@ -31,10 +31,26 @@
       </div>
     </div>
 
+    <!-- Message Box -->
     <div class="description-box">
       <span class="description-box__name"></span>:
       <span class="description-box__description"></span>
       <span class="message-close">Close {% include close.svg %}</span>
+    </div>
+
+    <!-- About Page -->
+    <div id="about__popup" class="zoom-anim-dialog mfp-hide about__popup">
+      <h3 class="modal__title">About</h3>
+      <p class="modal__body">
+        View your Halo 5 Guardians matches and see the medals you've earned.
+        This way you can look through your accomplishments while waiting
+        for another match to load! Enter your gamertag, fetch your matches,
+        then click on the matches to see your medals.
+      </p>
+      <h3 class="modal__title">Notice</h3>
+      <p class="modal__body">
+        This application is offered by Daniel Destefanis, which is solely responsible for its content. It is not sponsored or endorsed by Microsoft. This application uses the Halo® Game Data API. Halo © 2016 Microsoft Corporation. All rights reserved. Microsoft, Halo, and the Halo Logo are trademarks of the Microsoft group of companies.
+      </p>
     </div>
 
     {% include footer.html %}
@@ -43,7 +59,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="{{ "/js/uri.min.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/js/jsonp.js" | prepend: site.baseurl }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.1/jquery.magnific-popup.min.js"></script>
     <script src="{{ "/js/script.js" | prepend: site.baseurl }}"></script>
 
     <!-- Include Underscore Templates -->

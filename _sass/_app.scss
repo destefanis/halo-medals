@@ -3,28 +3,28 @@
  */
 
 .app-header {
-  transition: all 0.3s ease;
   background-repeat: no-repeat;
   background-size: cover;
+  transition: all 0.3s ease;
 }
 
 .app-header__overlay {
-  background-color: rgba($black, 0.7);
   padding: 4em 0 3em;
+  background-color: rgba($black, 0.7);
 
   @include media-query($on-palm) {
-    padding: 2em 0 2em;
+    padding: 2em 0;
   }
 }
 
 .landing-content {
   padding: 1.5em 0 2em;
-  text-align: center;
   background-color: rgba($secondary, 0.9);
+  text-align: center;
 
   @include media-query($on-palm) {
-    text-align: left;
     padding: 1em 15px 1.5em;
+    text-align: left;
   }
 }
 
@@ -35,25 +35,25 @@
 }
 
 .select {
-  padding: 0.5em 1.8em 0.5em 0.5em;
   width: 100%;
+  padding: 0.5em 1.8em 0.5em 0.5em;
+  border: 0;
+  border-radius: 0;
   background: transparent;
+  color: $white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: $base-font-family;
+  font-size: 0.9em;
+  font-weight: 400;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border: none;
-  font-size: 0.9em;
-  text-transform: uppercase;
-  font-family: $base-font-family;
-  font-weight: 400;
-  border-radius: 0;
-  color: $white;
-  letter-spacing: 1px;
 }
 
 .select__option {
-  background: $gray;
   padding: 0.5em;
+  background: $gray;
   color: $black;
 }
 
@@ -61,31 +61,37 @@
   position: absolute;
   top: 6px;
   right: 5px;
-  
+
   svg {
-    height: 1em;
-    width: 1em;
+    height: 0.9em;
+    width: 0.9em;
     fill: $white;
   }
 }
 
 /* for IE 11 */
-select::-ms-expand { 
+select::-ms-expand {
   display: none;
 }
 
 .input-field {
-  transition: all 0.25s ease;
   width: 44%;
   padding: 1.5em 1.5em 0.75em 0.75em;
-  background: transparent;
   border: 0;
-  color: $white;
   border-bottom: 2px solid $white;
+  background: transparent;
+  color: $white;
+  letter-spacing: 1px;
+  font-family: $base-font-family;
   font-size: 1em;
   font-weight: 300;
-  font-family: $base-font-family;
-  letter-spacing: 1px;
+  transition: all 0.25s ease;
+
+  @include media-query($on-palm) {
+    width: 80%;
+    margin-bottom: 1.5em;
+    margin-left: 1em;
+  }
 
   &:focus {
     outline: none;
@@ -94,33 +100,27 @@ select::-ms-expand {
       color: $primary;
     }
   }
-
-  @include media-query($on-palm) {
-    width: 80%;
-    margin-left: 1em;
-    margin-bottom: 1.5em;
-  }
 }
 
 .description-box {
-  transition: all 0.35s ease;
   position: fixed;
+  bottom: -80px;
+  height: 0;
   width: 100%;
-  text-align: center;
   padding: 1em 0;
   background: $secondary;
   color: $white;
-  height: 0;
-  bottom: -80px;
+  text-align: center;
+  transition: all 0.35s ease;
 
   @include media-query($on-palm) {
-    text-align: left;
     padding-left: 15px;
+    text-align: left;
   }
 
   &.is-visible {
-    height: auto;
     bottom: 0;
+    height: auto;
   }
 
   &.is-loading {
@@ -154,21 +154,21 @@ select::-ms-expand {
 }
 
 .message-close {
-  transition: all 0.25s ease;
   position: absolute;
+  right: 30px;
   display: inline-block;
   padding-top: 3px;
+  color: $white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   font-size: 0.76em;
   font-weight: 400;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  right: 30px;
-  color: $white;
   cursor: pointer;
+  transition: all 0.25s ease;
 
   @include media-query($on-palm) {
-    display: block;
     position: static;
+    display: block;
     padding-top: 6px;
   }
 
@@ -183,20 +183,21 @@ select::-ms-expand {
   }
 
   svg {
-    transition: all 0.25s ease;
     height: 0.76em;
     width: 0.76em;
+    transition: all 0.25s ease;
     fill: $white;
   }
 }
 
 .button {
-  padding: 1em 1em;
+  padding: 1em;
   border: 1px solid $primary;
   background: transparent;
-  font-size: 0.9em;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  font-size: 0.9em;
+  font-weight: 300;
   transition: all 0.3s ease;
 
   &:link,
@@ -207,9 +208,9 @@ select::-ms-expand {
   &:hover,
   &:focus,
   &:active {
-    color: $secondary;
-    background: $white;
     border-color: $white;
+    background: $white;
+    color: $secondary;
     text-decoration: none;
   }
 }
@@ -235,3 +236,12 @@ select::-ms-expand {
 //     color: $visor-color;
 //   }
 // }
+
+.about__popup {
+  position: relative;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px 30px;
+  background: $white;
+  text-align: left;
+}
