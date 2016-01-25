@@ -6,6 +6,43 @@
   background-repeat: no-repeat;
   background-size: cover;
   transition: all 0.3s ease;
+
+  .wrapper {
+    animation: fadeIn 0.7s linear 1;
+  }
+}
+
+@keyframes fadeIn {
+
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .app-header__overlay {
@@ -143,16 +180,6 @@ select::-ms-expand {
   }
 }
 
-.page__controls {
-  display: none;
-  height: 60px;
-  text-align: center;
-
-  &.is-visible {
-    display: block;
-  }
-}
-
 .message-close {
   position: absolute;
   right: 30px;
@@ -215,27 +242,55 @@ select::-ms-expand {
   }
 }
 
-.button--load-more {
+.page__controls {
+  display: none;
+  margin: 0 0 3em;
+  text-align: center;
+
+  &.is-visible {
+    display: block;
+  }
+
+  @include media-query($on-palm) {
+    margin: 1em 0 1.5em
+  }
+}
+
+.page__control-button {
+  display: inline-block;
+  width: 228px;
+
   &:link,
   &:visited {
-    background: $primary;
-    color: $white;
+    padding: 1em;
+    border: 1px solid $secondary;
+    background: transparent;
+    color: $secondary;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    font-weight: 300;
+    transition: all 0.25s ease;
   }
 
   &:hover,
   &:active,
   &:focus {
-    background: $secondary;
+    border-color: $primary;
+    color: $primary;
+    text-decoration: none;
   }
 }
 
-// .button--reset {
-//   &:link,
-//   &:visited {
-//     border-color: $visor-color;
-//     color: $visor-color;
-//   }
-// }
+.control-divider {
+  display: inline-block;
+  padding: 0 0.5em;
+
+  @include media-query($on-palm) {
+    display: block;
+    padding: 0.5em 0;
+  }
+}
 
 .about__popup {
   position: relative;

@@ -88,9 +88,38 @@
 
 .is--loading {
   -moz-animation: loading_animation 2s linear infinite;
-  -o-animation: loading_animation 2s linear infinite;
   -webkit-animation: loading_animation 2s linear infinite;
   animation: loading_animation 2s linear infinite;
+}
+
+@-moz-keyframes loading_animation {
+
+  0% {
+    background: rgba($primary, 1);
+  }
+
+  50% {
+    background: rgba($primary, 0.5);
+  }
+
+  100% {
+    background: rgba($primary, 1);
+  }
+}
+
+@-webkit-keyframes loading_animation {
+
+  0% {
+    background: rgba($primary, 1);
+  }
+
+  50% {
+    background: rgba($primary, 0.5);
+  }
+
+  100% {
+    background: rgba($primary, 1);
+  }
 }
 
 @keyframes loading_animation {
@@ -105,5 +134,69 @@
 
   100% {
     background: rgba($primary, 1);
+  }
+}
+
+.is--loading-button {
+  color: $secondary;
+  border-color: $white;
+  -moz-animation: button_loading_animation 2s linear infinite;
+  -webkit-animation: button_loading_animation 2s linear infinite;
+  animation: button_loading_animation 2s linear infinite;
+
+  &:visited,
+  &:link {
+    color: $secondary;
+  }
+}
+
+@-moz-keyframes button_loading_animation {
+
+  0% {
+    border-color: $primary;
+  }
+
+  50% {
+    border-color: $secondary;
+  }
+
+  100% {
+    border-color: $primary;
+  }
+}
+
+@-webkit-keyframes button_loading_animation {
+
+  0% {
+    border-color: $primary;
+    color: $primary;
+  }
+
+  50% {
+    border-color: $secondary;
+    color: $secondary;
+  }
+
+  100% {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+@keyframes button_loading_animation {
+
+  0% {
+    border-color: $primary;
+    color: $primary;
+  }
+
+  50% {
+    border-color: $secondary;
+    color: $secondary;
+  }
+
+  100% {
+    border-color: $primary;
+    color: $primary;
   }
 }

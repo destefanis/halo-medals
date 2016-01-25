@@ -63,11 +63,6 @@
   }
 
   @include media-query($on-palm) {
-    position: absolute;
-    top: 9px;
-    right: $spacing-unit / 2;
-    background-color: $background-color;
-    border-radius: 5px;
     text-align: right;
 
     .page-link {

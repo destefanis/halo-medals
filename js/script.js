@@ -260,6 +260,7 @@
 
         $('.description-box').removeClass("is-visible is-loading");
         $('.preloader__background').removeClass('is--loading');
+        $('.button--load-more').removeClass('is--loading-button');
       },
       statusCode: {
         429: function() {
@@ -271,10 +272,26 @@
     })
   }
 
+  // Fetch additional matches when the load more button is pressed.
   $('.button--load-more').click(function(e) {
     e.preventDefault();
 
     fetchMaps();
+    $('.preloader__background').addClass('is--loading');
+    $(this).addClass('is--loading-button');
+  });
+
+  // Reset Button Behaviors
+  $('.button--reset').click(function(e) {
+    e.preventDefault();
+    resultCount = 0;
+    $('.recent-matches').empty();
+    $('.page__controls').removeClass('is-visible');
+
+    fetchMaps();
+    $('.description-box').addClass('is-visible');
+    $('.description-box__name').html("Status");
+    $('.description-box__description').html("Searching for recent matches.");
     $('.preloader__background').addClass('is--loading');
   });
 
