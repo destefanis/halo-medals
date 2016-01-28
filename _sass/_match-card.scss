@@ -24,7 +24,7 @@
 .match-card {
   position: relative;
   height: 360px;
-  margin-bottom: 2px;
+  margin-bottom: 0;
   border-bottom: 3px solid $black;
   background-repeat: no-repeat;
   background-position: center;
@@ -166,15 +166,19 @@
 }
 
 .report__medal-count {
+  margin-bottom: 0;
   padding-top: 15px;
+  padding-bottom: 15px;
   padding-left: 30px;
+  background: $secondary;
+  color: $white;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 1em;
   font-weight: 300;
 
   @include media-query($on-palm) {
-    padding-top: 20px;
+    padding-top: 15px;
     padding-left: 15px;
   }
 }

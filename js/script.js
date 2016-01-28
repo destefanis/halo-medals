@@ -207,6 +207,30 @@
 
           // Declare our Underscores template for our match card.
           var matchCardTemplate = _.template($("#match-card").html());
+          var matchScore = 0;
+          var winningTeam = 0;
+
+          // Check to see if the player didn't finish the match.
+          if (match.player.DNF != true) {
+            // Loop through the teams in this match.
+            $.each(match.TeamStats, function(i, team) {
+
+              if (team.Score > matchScore) {
+                matchScore = team.Score;
+                winningTeam = team.TeamId;
+
+                if (match.player.TeamId === winningTeam) {
+                  match.player.MatchStatus = "Victory";
+                }
+                else {
+                  match.player.MatchStatus = "Defeat";
+                }
+              }
+            })
+          }
+          else {
+            match.player.MatchStatus = "DNF";
+          }
 
           // Breakout Maps are actually all variants built off the same
           // base map. So we need to check what the variant is, otherwise
