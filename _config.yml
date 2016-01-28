@@ -2,7 +2,7 @@
 title: HaloMedals.io
 email: info@halomedals.io
 description: Review the medals you earned after each Halo 5 guardians match.
-baseurl: "/halo-medals" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://halomedals.io" # the base hostname & protocol for your site
 gamertag: shesjustaglitch
 github_username:  destefanis

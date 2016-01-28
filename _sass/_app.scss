@@ -69,6 +69,10 @@
   position: relative;
   display: inline-block;
   margin: 0 1em;
+
+  @include media-query($on-palm) {
+    margin: 0 0.5em;
+  }
 }
 
 .select {
@@ -116,6 +120,7 @@ select::-ms-expand {
   padding: 1.5em 1.5em 0.75em 0.75em;
   border: 0;
   border-bottom: 2px solid $white;
+  border-radius: 0;
   background: transparent;
   color: $white;
   letter-spacing: 1px;
@@ -226,6 +231,12 @@ select::-ms-expand {
   font-size: 0.9em;
   font-weight: 300;
   transition: all 0.3s ease;
+
+  @include media-query($on-palm) {
+    padding: 1em 0.5em;
+    letter-spacing: 1px;
+    font-size: 0.7em;
+  }
 
   &:link,
   &:visited {
