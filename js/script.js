@@ -18,19 +18,24 @@
   var resultCount = 0;
   var appCount = 0;
 
+  // Clicking the button intializes the application.
+  $('.js-button').click(function(e) {
+    e.preventDefault();
+    runApp();
+  });
 
-  // When the input field is updated, we need to set that value
-  // to the gamertag, and replace spaces with plus characters so the gamertag
-  // can be passed into the request URL.
-  $('#gamertag-field').change(function() {
-    if ($('#gamertag-field').val()!='') {
-      userGamertag = $('#gamertag-field').val();
-      safeGamertag = $('#gamertag-field').val().replace(/ +/g,'+').trim();
+  // If the user hits enter, we should run the app.
+  $('.input-field').keypress(function(e) {
+    if (e.which == 13) {
+      runApp();
+      return false;
     }
   });
 
-  $('.js-button').click(function(e) {
-    e.preventDefault();
+  function runApp() {
+    // Basic steps for initiating the application.
+    userGamertag = $('#gamertag-field').val();
+    safeGamertag = $('#gamertag-field').val().replace(/ +/g,'+').trim();
 
     // Update the preloader.
     $('.description-box').addClass('is-visible');
@@ -40,14 +45,16 @@
 
     if ($('#gamertag-field').val() === '') {
       $('.description-box__name').html("Error");
-      $('.description-box__description').html("Gamertag field empty!");
+      $('.description-box__description').html("Gamertag field empty! Enter your gamertag and try again.");
     } 
     else {
       fetchMaps();
+      var currentUrl = window.location.href;
+      var newUrl = replaceUrlParam(currentUrl, "gamertag", safeGamertag);
+      window.history.pushState(newUrl, "Title", newUrl);
       $('.preloader__background').addClass('is--loading');
     }
-  });
-
+  }
 
   function fetchMaps() {
     // Fetch the list of maps available in the game. We need this data
@@ -302,12 +309,14 @@
     $('.description-box').removeClass('is-visible');
   });
 
+  // Close the match card when the close icon is clicked.
   $("#recent-matches").delegate(".close-button", "click", function() {
     $(this).closest('.match-card__report').removeClass('is-visible');
     $(this).closest('.match-card__report').prev('.match-card').removeClass('medals-visible');
     $('.description-box').removeClass('is-visible');
   });
 
+  // When a medal is clicked, display the description in the message modal.
   $("#recent-matches").delegate(".medal-list__item", "click", function() {
     var medalModalDescription = $(this).find('.medal-content').attr('data-description');
     var medalModalName = $(this).find('.medal-content').attr('data-name');
@@ -331,5 +340,61 @@
     removalDelay: 300,
     mainClass: 'my-mfp-zoom-in'
   });
+
+  // Session storage
+  window.onload = function() {
+
+    // Replace + characters with spaces for the input field.
+    var urlParameter = getUrlParameter('gamertag');
+
+    // Check to see if our url has a parameter set already.
+    if (urlParameter != undefined) {
+      var urlGamertag = urlParameter.replace(/\+/g,' ');
+      $('.input-field').val(urlGamertag);
+    } 
+    else {
+      // If sessionStorage is storing default values, exit the function and do 
+      // not restore data.
+      if (sessionStorage.getItem('gamertag') == "gamertag") {
+        return;
+      }
+
+      // If values are not blank, restore them to the fields.
+      var storedGamertag = sessionStorage.getItem('gamertag');
+      if (storedGamertag !== null) $('.input-field').val(storedGamertag);
+    }
+    
+  }
+
+  // Before refreshing the page, save the gamertag data to sessionStorage.
+  window.onbeforeunload = function() {
+    sessionStorage.setItem("gamertag", $('.input-field').val());
+  }
+
+  // Parse the URL parameter so that users can bookmark
+  // the site with their own gamertag and don't have to interact with the form.
+  var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+      if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+      }
+    }
+  };
+
+  // Function for replacing parameters.
+  function replaceUrlParam(url, paramName, paramValue){
+      var pattern = new RegExp('\\b('+paramName+'=).*?(&|$)')
+      if(url.search(pattern)>=0){
+          return url.replace(pattern,'$1' + paramValue + '$2');
+      }
+      return url + (url.indexOf('?')>0 ? '&' : '?') + paramName + '=' + paramValue 
+  }
 
 })(jQuery);
