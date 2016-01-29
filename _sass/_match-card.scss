@@ -100,11 +100,57 @@
   }
 }
 
-.stats__list {
-  display: inline-block;
-  margin: 0;
+.stats__list,
+.detail__list {
+  display: block;
+  margin: 0 0 15px 0;
   padding: 0;
   list-style: none;
+}
+
+.report__details {
+  display: inline-block;
+  width: 49.55%;
+  padding: 15px 30px;
+  vertical-align: top;
+  box-sizing: border-box;
+
+  @include media-query($on-palm) {
+    width: 100%;
+  }
+}
+
+.report__details--second {
+  @include media-query($on-palm) {
+    padding-top: 0;
+    text-align: center;
+  }
+}
+
+.list-item__label {
+  padding-right: 8px;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.list-item__label--duration {
+  padding-right: 28px;
+}
+
+.list-item__value {
+  text-transform: uppercase;
+  font-weight: 200;
+}
+
+.detail__list-item {
+  padding-bottom: 4px;
+  color: $black;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+.details__weapon-image {
+  max-width: 90%;
 }
 
 .stats__list-item {
@@ -116,6 +162,7 @@
 
 .match-card__match-type {
   display: inline-block;
+  margin-bottom: 0;
   color: $white;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -129,7 +176,7 @@
 
 .match-card__arrow {
   position: absolute;
-  top: 0;
+  top: 26px;
   right: 30px;
   color: $white;
   text-transform: uppercase;

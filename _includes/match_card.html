@@ -11,11 +11,11 @@
             <%= match.MatchType %>
           </h6>
           <h6 class="match-card__match-type">
-            - <%= match.player.MatchStatus %>
+          - <%= match.player.MatchStatus %>
           </h6>
           <ul class="stats__list">
             <li class="stats__list-item">
-              - KDA: 
+              KDA: 
             </li>
             <li class="stats__list-item">
               <%= match.player.TotalSpartanKills %> |
@@ -24,7 +24,10 @@
               <%= match.player.TotalDeaths %> |
             </li>
             <li class="stats__list-item">
-              <%= match.player.TotalAssists %> 
+              <%= match.player.TotalAssists %>
+            </li>
+            <li class="stats__list-item">
+              (<%= match.player.KDASpread %>)
             </li>
           </ul>
           <div class="match-card__arrow">
@@ -34,9 +37,44 @@
       </header>
     </div>
     <div class="match-card__report">
-      <h6 class="report__medal-count">Total Medals Earned: <%= match.player.MedalAwards.length %></h6>
+      <h6 class="report__medal-count">Match Details</h6>
+
+      <div class="report__details">
+        <ul class="detail__list">
+          <li class="detail__list-item">
+            <span class="list-item__label">Match Date:</span>
+            <span class="list-item__value"><%= match.DateStamp %></span>
+          </li>
+          <li class="detail__list-item">
+            <span class="list-item__label list-item__label--duration">Duration:</span>
+            <span class="list-item__value"><%= match.MatchLength %></span>
+          </li>
+          <li class="detail__list-item">
+            <span class="list-item__label">REQ Points Earned:</span>
+            <span class="list-item__value">+<%= match.player.CreditsEarned.TotalCreditsEarned %></span>
+          </li>
+          <li class="detail__list-item">
+            <span class="list-item__label">XP Earned:</span>
+            <span class="list-item__value">+<%= match.player.TotalXPEarned %></span>
+          </li>
+          <li class="detail__list-item">
+            <span class="list-item__label">Top Weapon:</span>
+            <span class="list-item__value"><%= match.player.WeaponWithMostKills.WeaponName %> (<%= match.player.WeaponWithMostKills.TotalKills %> Kills)</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="report__details report__details--second">
+        <img class="details__weapon-image" src = "<%= match.player.WeaponWithMostKills.WeaponURL %>" />
+      </div>
+
+      <h6 class="report__medal-count">
+        Total Medals Earned: <%= match.player.MedalAwards.length %>
+      </h6>
+
       <ul id = "<%= match.id %>" class="medal-list">
       </ul>
+
       <div class="report__close">
         <span class="close-button">Close {% include close.svg %}</span>
       </div>

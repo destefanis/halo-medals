@@ -14,6 +14,8 @@
   // Selected Mode
   var selectedMode = "";
 
+  var weaponData = {};
+
   // Variable for where we should start counting to retrieve matches.
   var resultCount = 0;
   var appCount = 0;
@@ -54,6 +56,10 @@
       window.history.pushState(newUrl, "Title", newUrl);
       $('.preloader__background').addClass('is--loading');
     }
+
+    if (jQuery.isEmptyObject(weaponData)) {
+      fetchWeapons();
+    }
   }
 
   function fetchMaps() {
@@ -79,6 +85,19 @@
 
       success: function(medal_data) {
         fetchMatches(map_data, medal_data);
+      }
+    })
+  }
+
+
+  function fetchWeapons() {
+    $.ajax({
+      url: "http://www.halomedals.io/json/weapons.json",
+      type: "GET",
+      dataType: "json",
+
+      success: function(weapon_data) {
+        weaponData = weapon_data;
       }
     })
   }
@@ -131,6 +150,7 @@
     $.each(matchHistory.Results, function() {
       var matchId = this.Id.MatchId;
       var gameMode = this.Id.GameMode;
+      var gameDate = this.MatchCompletedDate.ISO8601Date;
 
       // Games Modes are stored as an ints in the API.
       if (gameMode === 1) {
@@ -140,12 +160,12 @@
         gameMode = "warzone";
       }
 
-      FetchMatchDetails(matchId, map_data, medal_data, gameMode);
+      FetchMatchDetails(matchId, map_data, medal_data, gameMode, gameDate);
     });
   }
 
 
-  function FetchMatchDetails(matchId, map_data, medal_data, gameMode) {
+  function FetchMatchDetails(matchId, map_data, medal_data, gameMode, gameDate) {
 
     $.jsonp({
       url: "https://www.haloapi.com/stats/h5/" + gameMode + "/matches/" + matchId,
@@ -171,6 +191,17 @@
             match.MatchType = gameMode;
             match.MatchImage = this.imageUrl;
             match.id = matchId;
+
+            // Native string function for converting iso 8601 timestamp.
+            var timeStamp = match.TotalDuration;
+            var formattedTime = timeStamp.replace("PT","").replace("H",":").replace("M",":").replace("S","");
+            match.MatchLength = formattedTime.substring(0, formattedTime.indexOf('.'));
+
+            // Use substring function for formatting the date.
+            var date = gameDate;
+            var dateWithoutTime = date.substring(0, date.indexOf('T'));
+            var formattedDate = dateWithoutTime.substring(5) + "-" + dateWithoutTime.substring(0, 4);
+            match.DateStamp = formattedDate;
 
             $.each(match.PlayerStats, function(i, player) {
               var lowerTag = this.Player.Gamertag.toLowerCase();
@@ -205,6 +236,21 @@
 
         $.each(recentMatches, function(i, val) {
 
+          // How much XP the player earned this match.
+          val.player.TotalXPEarned = val.player.XpInfo.TotalXP - val.player.XpInfo.PrevTotalXP;
+
+          // Determine KDA spread.
+          var spread = (val.player.TotalSpartanKills + val.player.TotalAssists) / val.player.TotalDeaths;
+          var spreadRounded = Math.round(spread * 100) / 100;
+          
+          if (isNaN(spreadRounded)) {
+            val.player.KDASpread = "N/A";
+          }
+          else {
+            val.player.KDASpread = Math.round(spread * 100) / 100;  
+          }
+          
+
           // Declare our Underscores template for our match card.
           var matchCardTemplate = _.template($("#match-card").html());
           var matchScore = 0;
@@ -231,6 +277,16 @@
           else {
             match.player.MatchStatus = "DNF";
           }
+
+          // Loop through the weapons data to determine our top weapon
+          // information, including name and image url.
+          $.each(weaponData, function(i, weapon) {
+            if (weapon.id == val.player.WeaponWithMostKills.WeaponId.StockId) {
+              val.player.WeaponWithMostKills.WeaponName = weapon.name;
+              val.player.WeaponWithMostKills.WeaponURL = weapon.smallIconImageUrl;
+              return false;
+            }
+          })
 
           // Breakout Maps are actually all variants built off the same
           // base map. So we need to check what the variant is, otherwise
