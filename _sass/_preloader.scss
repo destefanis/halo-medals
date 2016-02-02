@@ -4,16 +4,16 @@
 
 .preloader {
   position: relative;
+  height: 164px;
+  width: 164px;
+  border-radius: 50%;
   margin-top: 1em;
   margin-bottom: 3em;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-
-  height: 164px;
-  width: 164px;
-  border-radius: 50%;
   background: $white;
+  box-shadow: 0px 2px 6px 0px rgba($black, 0.7);
 
   @include media-query($on-palm) {
     margin-bottom: 2em;

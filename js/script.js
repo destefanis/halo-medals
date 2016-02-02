@@ -5,16 +5,11 @@
 (function ($) {
   'use strict'
 
-  // Gamertag entered by the user.
-  var userGamertag = "";
-
-  // Gamertag for the API call url.
-  var safeGamertag = "";
-
-  // Selected Mode
+  var userGamertag = ""; // Gamertag entered by the user.
+  var safeGamertag = ""; // Gamertag for the API call url.
   var selectedMode = "";
-
   var weaponData = {};
+  var rankingData = {};
 
   // Variable for where we should start counting to retrieve matches.
   var resultCount = 0;
@@ -60,6 +55,10 @@
     if (jQuery.isEmptyObject(weaponData)) {
       fetchWeapons();
     }
+
+    if (jQuery.isEmptyObject(rankingData)) {
+      fetchCSR();
+    }
   }
 
   function fetchMaps() {
@@ -102,6 +101,28 @@
     })
   }
 
+  function fetchCSR() {
+    $.jsonp({
+      url: "https://www.haloapi.com/metadata/h5/metadata/csr-designations",
+      beforeSend: function(xhrObj) {
+        // Request headers
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
+      },
+      type: "GET",
+      dataType: "json",
+      success: function(csr_data) {
+        rankingData = csr_data;
+      },
+      statusCode: {
+        429: function() {
+          $('.description-box__name').html("Error");
+          $('.description-box__description').html("Maxmium API calls reached due to traffic. Please try again in 10 seconds.");
+          $('.preloader__background').removeClass('is--loading');
+        }
+      }
+    })
+  }
+
 
   function fetchMatches(map_data, medal_data) {
     // Fetch the match history for the entered gamertag.
@@ -110,7 +131,7 @@
       url: "https://www.haloapi.com/stats/h5/players/" + safeGamertag + "/matches?modes=" + selectedMode + "&start=" + resultCount + "&count=3",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -131,7 +152,7 @@
           $('.description-box__description').html("Maxmium API calls reached due to traffic. Please try again in 10 seconds.");
           $('.preloader__background').removeClass('is--loading');
         }
-      } 
+      }
 
     })
     .fail(function() {
@@ -171,7 +192,7 @@
       url: "https://www.haloapi.com/stats/h5/" + gameMode + "/matches/" + matchId,
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -194,18 +215,34 @@
 
             // Native string function for converting iso 8601 timestamp.
             var timeStamp = match.TotalDuration;
-            var formattedTime = timeStamp.replace("PT","").replace("H",":").replace("M",":").replace("S","");
-            match.MatchLength = formattedTime.substring(0, formattedTime.indexOf('.'));
+            var formattedTime = timeStamp.replace("PT","").replace("H",":").replace("M","MIN ");
+            match.MatchLength = formattedTime.substring(0, formattedTime.indexOf('.')) + "SEC";
 
             // Use substring function for formatting the date.
             var date = gameDate;
             var dateWithoutTime = date.substring(0, date.indexOf('T'));
-            var formattedDate = dateWithoutTime.substring(5) + "-" + dateWithoutTime.substring(0, 4);
-            match.DateStamp = formattedDate;
+            var formattedDate = dateWithoutTime.substring(5);
+            match.DateStamp = formattedDate.replace(/^0+/, '').replace("-","/");
 
             $.each(match.PlayerStats, function(i, player) {
               var lowerTag = this.Player.Gamertag.toLowerCase();
               var lowerUserTag = userGamertag.toLowerCase();
+
+              // Determine KDA spread.
+              var spread = (player.TotalSpartanKills + player.TotalAssists) / player.TotalDeaths;
+              var spreadRounded = Math.round(spread * 100) / 100;
+              var damage = parseFloat(player.TotalGroundPoundDamage + player.TotalWeaponDamage + player.TotalMeleeDamage + player.TotalGrenadeDamage + player.TotalPowerWeaponDamage);
+              player.TotalDamage = damage.toFixed();
+
+              var accuracy = Math.round(player.TotalShotsLanded / player.TotalShotsFired * 100);
+              player.TotalAccuracy = accuracy;
+
+              if (isNaN(spreadRounded)) {
+                player.KDASpread = "N/A";
+              }
+              else {
+                player.KDASpread = Math.round(spread * 100) / 100;  
+              }
 
               // The player list array in the match object uses the exact
               // gamertag string. If the user didn't capitalize their gamertag
@@ -229,32 +266,16 @@
             recentMatches.push(match);
           }
         })
-  
-        // We want to display the most recent matches first, so we have to
-        // reverse the order of the array.
-        recentMatches.reverse();
 
         $.each(recentMatches, function(i, val) {
-
-          // How much XP the player earned this match.
-          val.player.TotalXPEarned = val.player.XpInfo.TotalXP - val.player.XpInfo.PrevTotalXP;
-
-          // Determine KDA spread.
-          var spread = (val.player.TotalSpartanKills + val.player.TotalAssists) / val.player.TotalDeaths;
-          var spreadRounded = Math.round(spread * 100) / 100;
-          
-          if (isNaN(spreadRounded)) {
-            val.player.KDASpread = "N/A";
-          }
-          else {
-            val.player.KDASpread = Math.round(spread * 100) / 100;  
-          }
-          
 
           // Declare our Underscores template for our match card.
           var matchCardTemplate = _.template($("#match-card").html());
           var matchScore = 0;
           var winningTeam = 0;
+
+          // How much XP the player earned this match.
+          val.player.TotalXPEarned = val.player.XpInfo.TotalXP - val.player.XpInfo.PrevTotalXP;
 
           // Check to see if the player didn't finish the match.
           if (match.player.DNF != true) {
@@ -288,31 +309,32 @@
             }
           })
 
-          // Breakout Maps are actually all variants built off the same
-          // base map. So we need to check what the variant is, otherwise
-          // it just dispays as "Breakout Arena".
-          // @todo, this feature currently requires too many API calls, need
-          // to implement this more effeciently. 
-          if (val.MapId === "SAMPLE-c7edbf0f-f206-11e4-aa52-24be05e24f7e9") {
-            $.jsonp({
-              url: "https://www.haloapi.com/metadata/h5/metadata/map-variants/" + val.MapVariantId,
-              beforeSend: function(xhrObj) {
-                // Request headers
-                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","ba39bd7104bf4cdf8385f925f2e709a1");
-              },
-              type: "GET",
-              dataType: "json",
+          if (val.player.PreviousCsr != null) {
+            $.each(rankingData, function(i, rank){
+              if (rank.id == val.player.PreviousCsr.DesignationId) {
+                val.player.PreviousRankTitle = rank.name;
 
-              success: function(map_variant_data) {
-                // Our Map name is actually the name of the variant.
-                val.Name = map_variant_data.name;
-                $("#recent-matches").append(matchCardTemplate({match: val}));
+                $.each(rank.tiers, function(i, tier){
+                  if (tier.id == val.player.PreviousCsr.Tier) {
+                    val.player.PreviousCSRIcon = tier.iconImageUrl;
+                  }
+                })
               }
             })
           }
-          else {
-            val.Name = val.MapName;
-            $("#recent-matches").append(matchCardTemplate({match: val}));
+
+          if (val.player.CurrentCsr != null) {
+            $.each(rankingData, function(i, rank){
+              if (rank.id == val.player.CurrentCsr.DesignationId) {
+                val.player.CurrentRankTitle = rank.name;
+
+                $.each(rank.tiers, function(i, tier){
+                  if (tier.id == val.player.CurrentCsr.Tier) {
+                    val.player.CurrentCSRIcon = tier.iconImageUrl;
+                  }
+                })
+              }
+            })
           }
 
           // Show the load more button
@@ -339,10 +361,38 @@
             medalsEarned.push(result);
           })
 
-          // Append the medals to the match card.
-          var tableTemplate = _.template($("#medal-list").html());
-          var medalList = "#" + match.id;
-          $(medalList).append(tableTemplate({medalsEarned: medalsEarned}));
+          // Add a medals list to our 'val' object.
+          val.medalsEarned = medalsEarned;
+
+          // Breakout Maps are actually all variants built off the same
+          // base map. So we need to check what the variant is, otherwise
+          // it just dispays as "Breakout Arena".
+          if (val.MapId === "c7edbf0f-f206-11e4-aa52-24be05e24f7e") {
+            $.jsonp({
+              url: "https://www.haloapi.com/metadata/h5/metadata/map-variants/" + val.MapVariantId,
+              beforeSend: function(xhrObj) {
+                // Request headers
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
+              },
+              type: "GET",
+              dataType: "json",
+
+              success: function(map_variant_data) {
+                // Our Map name is actually the name of the variant.
+                val.Name = map_variant_data.name;
+                $("#recent-matches").append(matchCardTemplate({match: val}));
+              }
+            })
+          }
+          else {
+            val.Name = val.MapName;
+            $("#recent-matches").append(matchCardTemplate({match: val}));
+          }
+
+          // Determine rank progression for ranked arena matches.
+          if (val.MatchType === "arena") {
+            determineRank(val);
+          }
         })
 
         $('.description-box').removeClass("is-visible is-loading");
@@ -357,6 +407,120 @@
         }
       }
     })
+  }
+
+  // Determines rank progression in Arena matches.
+  function determineRank(val) {
+    var startValue;
+    var nextRankValue;
+    var previousValue;
+    var angleStart;
+    var reportID = '#report-' + val.id;
+
+    // If the player ranked up.
+    // If player is unranked.
+    if (val.player.PreviousCsr === null && val.player.MeasurementMatchesLeft > 0) {
+      $('#report-' + val.id).find('.progress-stats__number').html(val.player.MeasurementMatchesLeft);
+      $(reportID).find('.report__header--rank').text('Placement Matches Left:');
+    }
+    else if (val.player.CurrentCsr.DesignationId === 6) {
+      $(reportID + ' #previous-rank-circle').addClass('no-graph');
+      $(reportID).find('.progress-stats__number').html(val.player.CurrentCsr.Csr);
+      $(reportID).find('.report__header--rank-title').text(val.player.PreviousCsr.Csr + " " + val.player.CurrentRankTitle);
+    }
+    else if (val.player.CurrentCsr.DesignationId === 7) {
+      $(reportID + ' #previous-rank-circle').addClass('no-graph');
+      $(reportID).find('.progress-stats__number').html(val.player.CurrentCsr.Rank);
+      $(reportID).find('.report__header--rank-title').text(val.player.CurrentRankTitle + " " + val.player.PreviousCsr.Rank);
+    }
+    else if (val.player.CurrentCsr.PercentToNextTier < val.player.PreviousCsr.PercentToNextTier && val.player.CurrentCsr.Tier > val.player.PreviousCsr.Tier) {
+      startValue = val.player.PreviousCsr.PercentToNextTier / 100;
+      nextRankValue = val.player.CurrentCsr.PercentToNextTier / 100;
+      angleStart = val.player.PreviousCsr.PercentToNextTier * 3.6;
+      reportID = '#report-' + val.id;
+  
+      // Progress Circle Animation
+      $('#report-' + val.id + ' #previous-rank-circle').circleProgress({
+        startAngle: (-Math.PI / 2) + (angleStart * 0.01745),
+        emptyFill: 'rgba(90, 90, 102, 1)',
+        value: 1 - startValue,
+        size: 80,
+        thickness: 4,
+        fill: {
+          gradient: ["#85F7D3", "#5DFDCB"]
+        }
+      });
+
+      $(reportID + ' #previous-rank-circle').on('circle-animation-end', function(event) {
+        $(reportID).find('.progress-stats__number').html("+" + parseInt(((1 - startValue) + nextRankValue) * 100) + "%");
+        $(reportID).find('.report__header--rank-title').text(val.player.CurrentRankTitle + " " + val.player.PreviousCsr.Tier + " (RANK UP!)");
+      });
+    }
+    // If the player won a match but didn't rank up.
+    else if (val.player.CurrentCsr.PercentToNextTier > val.player.PreviousCsr.PercentToNextTier && val.player.CurrentCsr.Tier === val.player.PreviousCsr.Tier) {
+      startValue = val.player.CurrentCsr.PercentToNextTier / 100;
+      previousValue = val.player.PreviousCsr.PercentToNextTier / 100;
+      angleStart = (val.player.PreviousCsr.PercentToNextTier * 3.6);
+
+      // Progress Circle Animation
+      $(reportID + ' #previous-rank-circle').circleProgress({
+        startAngle: -Math.PI / 2,
+        value: startValue,
+        emptyFill: 'rgba(255, 255, 255, 1)',
+        size: 80,
+        thickness: 4,
+        fill: {
+          gradient: ["#85F7D3", "#5DFDCB"]
+        }
+      })
+
+      $(reportID + ' #previous-rank-circle').on('circle-animation-end', function(event) {
+        $(reportID).find('.progress-stats__number').html("+" + parseInt((startValue - previousValue) * 100) + "%");
+        $(reportID).find('.report__header--rank-title').text(val.player.CurrentRankTitle + " " + val.player.CurrentCsr.Tier);
+      });
+    }
+    // If the player lost some CSR but didn't downrank.
+    else if (val.player.CurrentCsr.PercentToNextTier < val.player.PreviousCsr.PercentToNextTier && val.player.CurrentCsr.Tier <= val.player.PreviousCsr.Tier) {
+      startValue = val.player.CurrentCsr.PercentToNextTier / 100;
+      previousValue = val.player.PreviousCsr.PercentToNextTier / 100;
+      angleStart = (val.player.PreviousCsr.PercentToNextTier * 3.6);
+  
+      // Progress Circle Animation
+      $(reportID + ' #previous-rank-circle').circleProgress({
+        startAngle: (-Math.PI / 2) + (angleStart * 0.01745),
+        value: startValue,
+        reverse: true,
+        size: 80,
+        thickness: 4,
+        fill: { color: "#F06449" }
+      });
+
+      $('#report-' + val.id + ' #previous-rank-circle').on('circle-animation-end', function(event) {
+        $('#report-' + val.id).find('.progress-stats__number').html("-" + parseInt((previousValue - startValue) * 100) + "%");
+        $(reportID).find('.report__header--rank-title').text(val.player.CurrentRankTitle + " " + val.player.CurrentCsr.Tier);
+      });
+    }
+    // If the player downranks.
+    else if (val.player.CurrentCsr.PercentToNextTier > val.player.PreviousCsr.PercentToNextTier && val.player.CurrentCsr.Tier < val.player.PreviousCsr.Tier) {
+      startValue = val.player.CurrentCsr.PercentToNextTier / 100;
+      previousValue = val.player.PreviousCsr.PercentToNextTier / 100;
+      angleStart = (val.player.PreviousCsr.PercentToNextTier * 3.6);
+  
+      // Progress Circle Animation
+      $('#report-' + val.id + ' #previous-rank-circle').circleProgress({
+        startAngle: -Math.PI / 2,
+        value: startValue,
+        size: 80,
+        thickness: 4,
+        emptyFill: 'rgba(240, 100, 73, 1)',
+        fill: { color: "#5A5A66" }
+      });
+
+      $('#report-' + val.id + ' #previous-rank-circle').on('circle-animation-end', function(event) {
+        $('#report-' + val.id).find('.progress-stats__number').html("-" + parseInt(((1 - startValue) + previousValue) * 100) + "%");
+        $(reportID).find('.report__header--rank-title').text(val.player.PreviousRankTitle + " " + val.player.PreviousCsr.Tier);
+      });
+    }
   }
 
   // Fetch additional matches when the load more button is pressed.
@@ -421,9 +585,25 @@
     mainClass: 'my-mfp-zoom-in'
   });
 
-  // Session storage
-  window.onload = function() {
+  $("#recent-matches").delegate(".detail__list-item", "click", function() {
+    $(this).toggleClass('is-visible');
+  })
 
+  $("#recent-matches").delegate(".team-list__toggle", "click", function() {
+    if ($(this).hasClass('team--is-visible')) {
+      $(this).toggleClass('team--is-visible');
+      $(this).text("Show");
+      $(this).parent().next('.team__table').hide();
+    }
+    else {
+      $(this).toggleClass('team--is-visible');
+      $(this).text("Hide");
+      $(this).parent().next('.team__table').show();
+    }
+  })
+
+  window.onload = function() {
+    // Session storage
     // Replace + characters with spaces for the input field.
     var urlParameter = getUrlParameter('gamertag');
 

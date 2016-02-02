@@ -15,9 +15,36 @@
 .match-card-wrapper {
   margin-bottom: 0.5em;
   background: $gray;
+  box-shadow: 0px 2px 3px 0px rgba($secondary, 0.7);
+  -moz-transform: translateY(0);
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+  transition: all 0.25s ease-in-out;
 
   @include media-query($on-palm) {
     margin-bottom: 15px;
+  }
+
+  &:hover {
+    -moz-transform: translateY(-1px);
+    -webkit-transform: translateY(-1px);
+    transform: translateY(-1px);
+
+    &:after {
+      opacity: 1;
+    }
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0;
+    box-shadow: 0.5px 2.5px 6px 0px rgba($secondary, 0.5);
+    transition: opacity 0.25s ease-in-out;
   }
 }
 
@@ -64,9 +91,20 @@
   }
 }
 
+.match-card__report {
+  height: 0;
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+
+  &.is-visible {
+    height: auto;
+  }
+}
+
 .match-card__title {
   margin-bottom: 0;
-  padding: 20px 30px 0;
+  padding: 20px 30px 5px;
   color: $white;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -92,6 +130,7 @@
 
 .match-card__details {
   position: relative;
+  padding-bottom: 5px;
   padding-left: 30px;
 
   @include media-query($on-palm) {
@@ -103,7 +142,7 @@
 .stats__list,
 .detail__list {
   display: block;
-  margin: 0 0 15px 0;
+  margin: 0 0 10px 0;
   padding: 0;
   list-style: none;
 }
@@ -111,42 +150,197 @@
 .report__details {
   display: inline-block;
   width: 49.55%;
-  padding: 15px 30px;
+  padding: 15px 15px 30px;
   vertical-align: top;
   box-sizing: border-box;
 
   @include media-query($on-palm) {
     width: 100%;
+    padding: 30px 15px 15px;
   }
 }
 
 .report__details--second {
+  padding: 15px 15px 30px;
+
   @include media-query($on-palm) {
+    padding: 30px;
     padding-top: 0;
     text-align: center;
+  }
+}
+
+.report__header {
+  margin-bottom: 15px;
+  padding: 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1em;
+  font-weight: 300;
+  color: $black;
+}
+
+.report__icon {
+  svg {
+    height: 1.25em;
+    width: 1.25em;
+    margin-bottom: -4px;
+    padding-right: 5px;
+    fill: $black;
+  }
+}
+
+.icon--xp {
+  position: relative;
+  top: -2px;
+  border: 1.8px solid;
+  border-color: $black;
+  border-radius: 50%;
+  margin-top: -2px;
+  margin-right: 10px;
+  padding: 0.25em;
+  text-align: center;
+  letter-spacing: -1px;
+  font-size: 0.76em;
+  font-weight: 400;
+  transition: border-color 0.25s ease;
+}
+
+.icon--arrow {
+  svg {
+    height: 0.76em;
+    width: 0.76em;
+    padding: 2px 4px 0;
+    fill: $black;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transition: fill 0.25s ease;
+  }
+}
+
+.report__statistic {
+  float: right;
+  font-size: 1em;
+  font-weight: 200;
+}
+
+.top-weapon-wrapper {
+  height: 200px;
+  width: 100%;
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: rgba(19, 23, 38, 0.05);
+  background-position: center;
+}
+
+.top-weapon__content {
+  margin-top: 50%;
+  background: rgba(19, 23, 38, 0.7);
+  position: absolute;
+  bottom: 0;
+  color: #fff;
+  width: 97%;
+  padding: 5px;
+  letter-spacing: 1px;
+}
+
+.icon--req {
+  height: auto;
+  width: 1.3em;
+  margin-top: -4px;
+  padding-right: 5px;
+}
+
+.detail__list-item {
+  padding: 0 10px 5px;
+  //border-bottom: 2px solid $secondary;
+  color: $black;
+  letter-spacing: 1px;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:first-of-type {
+    //border-top: 2px solid $secondary;
+  }
+
+  &.is-visible {
+    .icon--arrow svg {
+      -webkit-transform: none;
+      transform: none;
+    }
+
+    .reward__list {
+      height: auto;
+    }
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $visor-color;
+
+    svg {
+      fill: $visor-color;
+    }
+
+    .icon--xp {
+      border-color: $visor-color;
+    }
   }
 }
 
 .list-item__label {
   padding-right: 8px;
   text-transform: uppercase;
-  font-weight: 400;
-}
-
-.list-item__label--duration {
-  padding-right: 28px;
+  font-weight: 300;
 }
 
 .list-item__value {
+  float: right;
   text-transform: uppercase;
   font-weight: 200;
 }
 
-.detail__list-item {
-  padding-bottom: 4px;
-  color: $black;
-  letter-spacing: 1px;
+.top-weapon__title {
+  text-transform: uppercase;
   font-weight: 300;
+}
+
+.top-weapon__value {
+  text-transform: uppercase;
+  font-weight: 200;
+}
+
+.reward__list {
+  transition: height 0.3s ease;
+  height: 0;
+  overflow: hidden;
+  margin: 5px 0;
+  padding: 0;
+  color: $secondary;
+  list-style: none;
+}
+
+.reward__list-item {
+  padding: 0 0 2px;
+  color: $secondary;
+
+  &:last-child {
+    margin-top: 4px;
+    padding: 4px 0;
+    border-top: 1px solid $secondary;
+    border-bottom: 1px solid $secondary;
+  }
+}
+
+.reward__list-item-value {
+  float: right;
+  font-weight: 200;
 }
 
 .details__weapon-image {
@@ -177,7 +371,7 @@
 .match-card__arrow {
   position: absolute;
   top: 26px;
-  right: 30px;
+  right: 36px;
   color: $white;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -201,18 +395,29 @@
   }
 }
 
-.match-card__report {
-  height: 0;
-  margin-bottom: 10px;
-  overflow: hidden;
-  transition: all 0.25s ease;
+.rank-progress {
+  position: relative;
+  display: inline-block;
+  padding-left: 15px;
+}
 
-  &.is-visible {
-    height: auto;
+.previous-rank-circle {
+  &.no-graph {
+    height: 80px;
+    width: 80px;
   }
 }
 
-.report__medal-count {
+.rank-progress__icon {
+  position: absolute;
+  top: 11px;
+  left: 25px;
+  display: inline-block;
+  height: auto;
+  width: 60px;
+}
+
+.report-section__header {
   margin-bottom: 0;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -220,13 +425,185 @@
   background: $secondary;
   color: $white;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   font-size: 1em;
-  font-weight: 300;
+  font-weight: 400;
 
   @include media-query($on-palm) {
     padding-top: 15px;
     padding-left: 15px;
+  }
+}
+
+.rank-progress-stats {
+  display: inline-block;
+  width: 60%;
+  margin-top: -8px;
+  padding: 0 0 15px 15px;
+  vertical-align: top;
+}
+
+.progress-stats__number {
+  font-size: 2em;
+  font-weight: 200;
+}
+
+.report__header--rank,
+.report__header--rank-title {
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.report__header--rank-title {
+  font-weight: 300;
+}
+
+.report-teams {
+  //
+}
+
+.team-header {
+  position: relative;
+  padding: 15px 30px;
+  background: $primary;
+  color: $white;
+}
+
+// First Letter in the Team
+.team-header__logo {
+  display: inline-block;
+  font-size: 2em;
+  font-weight: 400;
+  vertical-align: top;
+}
+
+.team-header__title {
+  display: inline-block;
+  padding-top: 2px;
+  padding-left: 25px;
+  margin-bottom: 0;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 400;
+}
+
+.report-teams__score {
+  padding: 0;
+  background: $primary;
+  color: $white;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 0.76em;
+  font-weight: 300;
+}
+
+.team-list__toggle {
+  transition: all 0.25s ease;
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  padding: 4px 10px;
+  border: 1px solid $white;
+  color: $white;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: $black;
+    color: $black;
+  }
+}
+
+.team__table {
+  width: 100%;
+  padding: 30px;
+
+  @include media-query($on-palm) {
+    padding: 5px;
+  }
+
+  &.is-hidden {
+    //
+  }
+}
+
+.team__table-header {
+  padding-bottom: 10px;
+  text-align: right;
+  letter-spacing: 1px;
+  font-size: 0.9em;
+  font-weight: 300;
+  text-transform: uppercase;
+
+  &:first-of-type {
+    text-align: left;
+  }
+
+  @include media-query($on-palm) {
+    display: none;
+  }
+}
+
+.table-row {
+  @include media-query($on-palm) {
+    display: block;
+    margin-bottom: 7px;
+    padding: 5px 15px;
+    background: $white;
+  }
+}
+
+.table-column {
+  padding-right: 2px;
+  padding-bottom: 4px;
+  text-align: right;
+  letter-spacing: 0.5px;
+  font-weight: 200;
+
+  // Fix for KDA Column being an awkward size.
+  &:nth-child(5) {
+    width: 11%;
+  }
+
+  @include media-query($on-palm) {
+    display: block;
+    text-align: left;
+
+    &:first-child {
+      padding: 10px 5px 10px 0;
+      font-size: 1.2em;
+
+      &:before {
+        display: none;
+      }
+    }
+
+    &:last-child {
+      padding-bottom: .5em;
+    }
+  }
+
+  &:first-of-type {
+    text-align: left;
+  }
+
+  &:before {
+    display: none;
+    
+    @include media-query($on-palm) {
+      content: attr(data-th)" ";
+      display: inline-block;
+      padding: 0 4px 0 0;
+      letter-spacing: 0.5px;
+      font-weight: 300;
+    }     
   }
 }
 
@@ -237,7 +614,7 @@
 
 .close-button {
   display: inline-block;
-  padding: 15px 30px;
+  padding: 0px 30px 15px;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 400;
@@ -264,6 +641,10 @@
 .medal-list {
   margin: 0;
   padding: 0;
+
+  @include media-query($on-palm) {
+    text-align: center;
+  }
 }
 
 .medal-content {
@@ -280,6 +661,7 @@
   padding: 15px;
   background-repeat: no-repeat;
   text-align: center;
+  font-size: 0;
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -302,6 +684,7 @@
 .medal-list__item-content {
   position: relative;
   min-height: 140px;
+  font-size: 15px;
 }
 
 .medal__icon {

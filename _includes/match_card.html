@@ -6,16 +6,21 @@
         <h2 class="match-card__title">
           <%= match.Name %>
         </h2>
+
         <div class="match-card__details">
-          <h6 class="match-card__match-type">
+          <h5 class="match-card__match-type">
             <%= match.MatchType %>
-          </h6>
-          <h6 class="match-card__match-type">
+          </h5>
+          <h5 class="match-card__match-type">
           - <%= match.player.MatchStatus %>
-          </h6>
+          </h5>
+
           <ul class="stats__list">
             <li class="stats__list-item">
-              KDA: 
+              DATE: <%= match.DateStamp %> -
+            </li>
+            <li class="stats__list-item">
+             KDA: 
             </li>
             <li class="stats__list-item">
               <%= match.player.TotalSpartanKills %> |
@@ -30,49 +35,236 @@
               (<%= match.player.KDASpread %>)
             </li>
           </ul>
+
           <div class="match-card__arrow">
             {% include arrow.svg %}
           </div>
         </div>
       </header>
     </div>
-    <div class="match-card__report">
-      <h6 class="report__medal-count">Match Details</h6>
 
+    <div class="match-card__report" id = "report-<%= match.id %>">
+      <div class="report-teams">
+        <% _.each(match.TeamStats, function(team) { %>
+          <header class="team-header">
+            <% if (team.TeamId === 0 && match.TeamStats.length < 3) { %>
+              <span class="team-header__logo">R</span>
+              <h6 class="team-header__title">
+                Red Team
+            <% } else if (team.TeamId === 1 && match.TeamStats.length < 3) { %>
+              <span class="team-header__logo">B</span> 
+              <h6 class="team-header__title">
+                Blue Team
+            <% } else { %>
+              <span class="team-header__logo"><%= team.TeamId + 1 %></span> 
+              <h6 class="team-header__title">
+                Player <%= team.TeamId + 1 %>
+            <% } %>
+                <div class="report-teams__score">
+                  Score: <%= team.Score %>
+                </div>
+              </h6>
+              <div class="team-list__toggle team--is-visible">
+                Hide
+              </div>
+          </header>
+          <table class="team__table">
+            <thead>
+              <tr>
+                <th class="team__table-header">Name</th>
+                <th class="team__table-header">Kills</th>
+                <th class="team__table-header">Deaths</th>
+                <th class="team__table-header">Assists</th>
+                <th class="team__table-header">KDA</th>
+                <th class="team__table-header">Damage</th>
+                <th class="team__table-header">Acc</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% _.each(match.PlayerStats, function(matchPlayer) { %>
+                <% if (matchPlayer.TeamId === team.TeamId) { %>
+                <tr class="table-row">
+                  <td class="table-column">
+                    <%= matchPlayer.Player.Gamertag %>
+                  </td>
+                  <td class="table-column" data-th="Kills:">
+                    <%= matchPlayer.TotalSpartanKills %>
+                  </td>
+                  <td class="table-column" data-th="Deaths:">
+                    <%= matchPlayer.TotalDeaths %>
+                  </td>
+                  <td class="table-column" data-th="Assists:">
+                    <%= matchPlayer.TotalAssists %>
+                  </td>
+                  <td class="table-column" data-th="KDA:">
+                    <%= matchPlayer.KDASpread %>
+                  </td>
+                  <td class="table-column" data-th="Damage:">
+                    <%= matchPlayer.TotalDamage %>
+                  </td>
+                  <td class="table-column" data-th="Accuracy:">
+                    <%= matchPlayer.TotalAccuracy %>
+                  </td>
+                </tr>
+                <% } %>
+              <% }); %>
+            </tbody>
+          </table>
+        <% }); %>
+      </div>
+
+      <h5 class="report-section__header">
+        Match Details
+      </h5>
       <div class="report__details">
+
+        <h6 class="report__header">
+          <span class="report__icon">{% include svg/clock-icon.svg %}</span>
+          Match Duration:
+          <span class="report__statistic">
+           <%= match.MatchLength %>
+          </span>
+        </h6>
+
         <ul class="detail__list">
           <li class="detail__list-item">
-            <span class="list-item__label">Match Date:</span>
-            <span class="list-item__value"><%= match.DateStamp %></span>
+            <span class="list-item__label">
+              <img class="icon--req" src="https://content.halocdn.com/media/Default/games/halo-5-guardians/reqs/credit-icons/default-credits-icon-45x45-7432852164084ae1ae179199a9924e88.png">
+              REQ Breakdown:
+            </span>
+            <span class="list-item__value">
+              +<%= match.player.CreditsEarned.TotalCreditsEarned %>
+              <span class="icon--arrow">
+                {% include arrow.svg %}
+              </span>
+            </span>
+            <ul class="reward__list">
+              <li class="reward__list-item">
+                Boost: 
+                <span class="reward__list-item-value">
+                  <%= match.player.CreditsEarned.BoostAmount %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                Rank Bonus:
+                <span class="reward__list-item-value">
+                  <%= match.player.CreditsEarned.PlayerRankAmount %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                Time Bonus: 
+                <span class="reward__list-item-value">
+                  <%= match.player.CreditsEarned.TimePlayedAmount.toFixed(0) %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                Total Credits Earned: 
+                <span class="reward__list-item-value">
+                  <%= match.player.CreditsEarned.TotalCreditsEarned %>
+                </span>
+              </li>
+            </ul>
           </li>
+
           <li class="detail__list-item">
-            <span class="list-item__label list-item__label--duration">Duration:</span>
-            <span class="list-item__value"><%= match.MatchLength %></span>
-          </li>
-          <li class="detail__list-item">
-            <span class="list-item__label">REQ Points Earned:</span>
-            <span class="list-item__value">+<%= match.player.CreditsEarned.TotalCreditsEarned %></span>
-          </li>
-          <li class="detail__list-item">
-            <span class="list-item__label">XP Earned:</span>
-            <span class="list-item__value">+<%= match.player.TotalXPEarned %></span>
-          </li>
-          <li class="detail__list-item">
-            <span class="list-item__label">Top Weapon:</span>
-            <span class="list-item__value"><%= match.player.WeaponWithMostKills.WeaponName %> (<%= match.player.WeaponWithMostKills.TotalKills %> Kills)</span>
+            <span class="list-item__label">
+              <span class="icon--xp">XP</span>Exp Breakdown:
+            </span>
+            <span class="list-item__value">
+              +<%= match.player.TotalXPEarned %>
+              <span class="icon--arrow">
+                {% include arrow.svg %}
+              </span>
+            </span>
+            <ul class="reward__list">
+              <li class="reward__list-item">
+                Boost: 
+                <span class="reward__list-item-value">
+                  <%= match.player.XpInfo.BoostAmount %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                Performance:
+                <span class="reward__list-item-value">
+                  <%= match.player.XpInfo.PerformanceXP %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                Rank Bonus:
+                <span class="reward__list-item-value">
+                  <%= match.player.XpInfo.PlayerRankXPAward %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                Time Bonus: 
+                <span class="reward__list-item-value">
+                  <%= match.player.XpInfo.PlayerTimePerformanceXPAward %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                SR Rank Multiplier: 
+                <span class="reward__list-item-value">
+                  <%= match.player.XpInfo.SpartanRankMatchXPScalar %>
+                </span>
+              </li>
+              <li class="reward__list-item">
+                Total XP Earned: 
+                <span class="reward__list-item-value">
+                  <%= match.player.TotalXPEarned %>
+                </span>
+              </li>
+            </ul>
           </li>
         </ul>
+        <% if (match.MatchType === "arena") { %>
+          <div class="detail__ranks">
+            <div class="rank-progress">
+              <div id="previous-rank-circle" class="previous-rank-circle"></div>
+              <img class="rank-progress__icon" src = "<%= match.player.PreviousCSRIcon %>">
+            </div>
+            <div class="rank-progress-stats">
+            
+              <h6 class="report__header report__header--rank-title"></h6>
+
+              <h6 class="report__header report__header--rank">
+                Rank Progress
+              </h6>
+            
+              <span class="progress-stats__number"></span>
+            </div>
+          </div>
+        <% } %>
       </div>
 
       <div class="report__details report__details--second">
-        <img class="details__weapon-image" src = "<%= match.player.WeaponWithMostKills.WeaponURL %>" />
+        <div class="top-weapon-wrapper" style = "background-image: url('<%= match.player.WeaponWithMostKills.WeaponURL %>');">
+          <div class="top-weapon__content">
+            <span class="top-weapon__title">Top Weapon: </span>
+            <span class="top-weapon__value"><%= match.player.WeaponWithMostKills.WeaponName %> (<%= match.player.WeaponWithMostKills.TotalKills %> Kills)
+            </span>
+          </div>
+        </div>
       </div>
 
-      <h6 class="report__medal-count">
-        Total Medals Earned: <%= match.player.MedalAwards.length %>
+      <h6 class="report-section__header">
+        Medal Types Earned: <%= match.player.MedalAwards.length %>
       </h6>
 
       <ul id = "<%= match.id %>" class="medal-list">
+        <% _.each(match.medalsEarned, function(medal) { %>
+            <li class="medal-list__item">
+              <div class="medal-list__item-content">
+                <div class="medal__icon" style = "background-image: url('<%= medal.spriteLocation.spriteSheetUri %>'); background-size: auto; background-position: -<%= medal.spriteLocation.left %>px -<%= medal.spriteLocation.top %>px; background-origin: content-box;">
+                </div>
+                <div class="medal-content" data-name = "<%= medal.name %>" data-description = "<%= medal.description %>">
+                  <span class="medal__name">
+                    <%= medal.name %>
+                    <span class="medal__count"><%= medal.count %></span>
+                  </span>
+                </div>
+              </div>
+            </li>
+        <% }); %>
       </ul>
 
       <div class="report__close">
