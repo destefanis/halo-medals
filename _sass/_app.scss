@@ -324,3 +324,11 @@ select::-ms-expand {
   background: $white;
   text-align: left;
 }
+
+.element-invisible {
+  display: none;
+}
+
+.thumbnail.self {
+  background: url(%%self%%);
+}
