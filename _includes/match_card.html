@@ -72,6 +72,11 @@
             <thead>
               <tr>
                 <th class="team__table-header">Name</th>
+
+                <% if (match.MatchType === "arena") { %>
+                  <th class="team__table-header">Rank</th>
+                <% } %>
+
                 <th class="team__table-header">Kills</th>
                 <th class="team__table-header">Deaths</th>
                 <th class="team__table-header">Assists</th>
@@ -83,29 +88,42 @@
             <tbody>
               <% _.each(match.PlayerStats, function(matchPlayer) { %>
                 <% if (matchPlayer.TeamId === team.TeamId) { %>
-                <tr class="table-row">
-                  <td class="table-column">
-                    <%= matchPlayer.Player.Gamertag %>
-                  </td>
-                  <td class="table-column" data-th="Kills:">
-                    <%= matchPlayer.TotalSpartanKills %>
-                  </td>
-                  <td class="table-column" data-th="Deaths:">
-                    <%= matchPlayer.TotalDeaths %>
-                  </td>
-                  <td class="table-column" data-th="Assists:">
-                    <%= matchPlayer.TotalAssists %>
-                  </td>
-                  <td class="table-column" data-th="KDA:">
-                    <%= matchPlayer.KDASpread %>
-                  </td>
-                  <td class="table-column" data-th="Damage:">
-                    <%= matchPlayer.TotalDamage %>
-                  </td>
-                  <td class="table-column" data-th="Accuracy:">
-                    <%= matchPlayer.TotalAccuracy %>
-                  </td>
-                </tr>
+                  <tr class="table-row">
+                    <td class="table-column">
+                      <%= matchPlayer.Player.Gamertag %>
+                    </td>
+
+                    <% if (match.MatchType === "arena") { %>
+                      <td class="table-column" data-th="Rank:">
+                        <% if (matchPlayer.PreviousCSRIcon != null) { %>
+                          <span class="column-player__rank">
+                            <img class="column-player__rank-icon" src = "<%= matchPlayer.PreviousCSRIcon %>">
+                          </span>
+                        <% } else { %>
+                          N/A
+                        <% } %>
+                      </td>
+                    <% } %>
+
+                    <td class="table-column" data-th="Kills:">
+                      <%= matchPlayer.TotalSpartanKills %>
+                    </td>
+                    <td class="table-column" data-th="Deaths:">
+                      <%= matchPlayer.TotalDeaths %>
+                    </td>
+                    <td class="table-column" data-th="Assists:">
+                      <%= matchPlayer.TotalAssists %>
+                    </td>
+                    <td class="table-column" data-th="KDA:">
+                      <%= matchPlayer.KDASpread %>
+                    </td>
+                    <td class="table-column" data-th="Damage:">
+                      <%= matchPlayer.TotalDamage %>
+                    </td>
+                    <td class="table-column" data-th="Accuracy:">
+                      <%= matchPlayer.TotalAccuracy %>
+                    </td>
+                  </tr>
                 <% } %>
               <% }); %>
             </tbody>
@@ -218,10 +236,12 @@
         </ul>
         <% if (match.MatchType === "arena") { %>
           <div class="detail__ranks">
+          <% if (match.player.PreviousCSRIcon != null ) { %>
             <div class="rank-progress">
               <div id="previous-rank-circle" class="previous-rank-circle"></div>
               <img class="rank-progress__icon" src = "<%= match.player.PreviousCSRIcon %>">
             </div>
+          <% } %>
             <div class="rank-progress-stats">
             
               <h6 class="report__header report__header--rank-title"></h6>
