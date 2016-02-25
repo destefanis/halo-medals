@@ -540,6 +540,36 @@
     "contentId": "798a60dd-410a-4493-ba48-22e9dfd8ddff"
   },
   {
+    "name": "Ball",
+    "description": null,
+    "type": "Unknown",
+    "largeIconImageUrl": "https://content.halocdn.com/media/Default/games/halo-5-guardians/tools-of-destruction/weapons/assault-ball-weapon-e1cffc1788c849d8938bf104fe55e07a.png",
+    "smallIconImageUrl": "https://image.halocdn.com:443/?path=https%3a%2f%2fcontent.halocdn.com%2fmedia%2fDefault%2fgames%2fhalo-5-guardians%2ftools-of-destruction%2fweapons%2fassault-ball-weapon-e1cffc1788c849d8938bf104fe55e07a.png&width=332&hash=XinxuuCPidF6%2fISNfNygk%2bm8Hp9%2b%2b9xAg8ZPCu9Pr1k%3d",
+    "isUsableByPlayer": true,
+    "id": "393532233",
+    "contentId": "1e2acd11-6bbb-4f62-855b-21a8b84f5a7d"
+  },
+  {
+    "name": "Gravity Hammer",
+    "description": "Brutally effective melee weapon that combines a hammer with repurposed gravitic impellers on the striking face. Each smash unleashes a damaging area-of-effect pulse with knockback. Regular melee attacks are weaker, but do not consume energy.",
+    "type": "Power",
+    "largeIconImageUrl": "https://content.halocdn.com/media/Default/games/halo-5-guardians/tools-of-destruction/weapons/gravity-hammer-07ce6812c81c4c67a6dd68dbb7456355.png",
+    "smallIconImageUrl": "https://image.halocdn.com:443/?path=https%3a%2f%2fcontent.halocdn.com%2fmedia%2fDefault%2fgames%2fhalo-5-guardians%2ftools-of-destruction%2fweapons%2fgravity-hammer-07ce6812c81c4c67a6dd68dbb7456355.png&width=332&hash=AflzYP165PLTA%2fVLKmehUKYhO7vCycNsO2GNox7ZM24%3d",
+    "isUsableByPlayer": true,
+    "id": "2899979324",
+    "contentId": "91cefab6-7af6-4fec-8543-f8efd4908c21"
+  },
+  {
+    "name": "Halo One Pistol",
+    "description": null,
+    "type": "Power",
+    "largeIconImageUrl": "https://content.halocdn.com/media/Default/games/halo-5-guardians/tools-of-destruction/weapons/magnum-h1-42d7453086fa48ba897bd99f8f7cab8f.png",
+    "smallIconImageUrl": "https://image.halocdn.com:443/?path=https%3a%2f%2fcontent.halocdn.com%2fmedia%2fDefault%2fgames%2fhalo-5-guardians%2ftools-of-destruction%2fweapons%2fmagnum-h1-42d7453086fa48ba897bd99f8f7cab8f.png&width=332&hash=GJ5%2fNOKvONYcodHWSK510eVm5lmK7CW92O2Nrvg0ZZE%3d",
+    "isUsableByPlayer": true,
+    "id": "2758094302",
+    "contentId": "459e3484-e687-4867-88dc-01331973e0aa"
+  },
+  {
     "name": "PHANTOM",
     "description": "Phantom deployable for campaign and warzone",
     "type": "Vehicle",
