@@ -77,11 +77,14 @@
 
 
   function fetchMedals(map_data) {
-    $.ajax({
-      url: "http://www.halomedals.io/json/medals.json",
+    $.jsonp({
+      url: "https://www.haloapi.com/metadata/h5/metadata/medals",
+      beforeSend: function(xhrObj) {
+        // Request headers
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+      },
       type: "GET",
       dataType: "json",
-
       success: function(medal_data) {
         fetchMatches(map_data, medal_data);
       }
@@ -244,6 +247,22 @@
                 player.KDASpread = Math.round(spread * 100) / 100;  
               }
 
+              // Determine the rank of each player.
+              if (player.PreviousCsr != null) {
+                $.each(rankingData, function(i, rank){
+                  if (rank.id == player.PreviousCsr.DesignationId) {
+                   player.PreviousRankTitle = rank.name;
+
+                    $.each(rank.tiers, function(i, tier){
+                      if (tier.id == player.PreviousCsr.Tier) {
+                        player.PreviousCSRIcon = tier.iconImageUrl;
+                        return;
+                      }
+                    })
+                  }
+                })
+              }
+
               // The player list array in the match object uses the exact
               // gamertag string. If the user didn't capitalize their gamertag
               // exactly the same, it may not find them in the match.
@@ -381,6 +400,8 @@
                 // Our Map name is actually the name of the variant.
                 val.Name = map_variant_data.name;
                 $("#recent-matches").append(matchCardTemplate({match: val}));
+                // Determine rank progression for ranked arena matches.
+                determineRank(val);
               }
             })
           }
@@ -389,10 +410,10 @@
             $("#recent-matches").append(matchCardTemplate({match: val}));
           }
 
-          // Determine rank progression for ranked arena matches.
           if (val.MatchType === "arena") {
             determineRank(val);
           }
+
         })
 
         $('.description-box').removeClass("is-visible is-loading");
@@ -419,8 +440,8 @@
 
     // If the player ranked up.
     // If player is unranked.
-    if (val.player.PreviousCsr === null && val.player.MeasurementMatchesLeft > 0) {
-      $('#report-' + val.id).find('.progress-stats__number').html(val.player.MeasurementMatchesLeft);
+    if (val.player.PreviousCsr === null && val.player.MeasurementMatchesLeft > -1) {
+      $(reportID).find('.progress-stats__number').html(val.player.MeasurementMatchesLeft);
       $(reportID).find('.report__header--rank').text('Placement Matches Left:');
     }
     else if (val.player.CurrentCsr.DesignationId === 6) {

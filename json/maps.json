@@ -393,5 +393,26 @@
     "imageUrl": "https://content.halocdn.com/media/Default/games/halo-5-guardians/map-images/arena/arena-pistons-torque-bc1f890581574709aba1681af8dc5710.jpg",
     "id": "cc74f4e1-f206-11e4-ad66-24be05e24f7e",
     "contentId": "cc74f4e1-f206-11e4-ad66-24be05e24f7e"
+  },
+  {
+    "name": "Skirmish at Darkstar",
+    "description": "Skirmish at Darkstar",
+    "supportedGameModes": [
+      "Warzone"
+    ],
+    "imageUrl": "https://content.halocdn.com/media/Default/games/halo-5-guardians/map-images/warzone/warzone_maps_array10-362d94062cff45f1a51cb13abbd8a363.jpg",
+    "id": "5e130537-2275-40b5-9758-94b1986934ed",
+    "contentId": "5e130537-2275-40b5-9758-94b1986934ed"
+  },
+  {
+    "name": "Tyrant",
+    "description": "Only ghosts remain to rule this broken kingdom.",
+    "supportedGameModes": [
+      "Arena",
+      "Custom"
+    ],
+    "imageUrl": "https://content.halocdn.com/media/Default/games/halo-5-guardians/map-images/arena/arena_maps_array15-3e87527eb14d4413accb3bfe227135f5.jpg",
+    "id": "ce89a40f-f206-11e4-b83f-24be05e24f7e",
+    "contentId": "ce89a40f-f206-11e4-b83f-24be05e24f7e"
   }
 ]
