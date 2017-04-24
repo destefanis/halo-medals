@@ -328,20 +328,8 @@
             }
           })
 
-          if (val.player.PreviousCsr != null) {
-            $.each(rankingData, function(i, rank){
-              if (rank.id == val.player.PreviousCsr.DesignationId) {
-                val.player.PreviousRankTitle = rank.name;
-
-                $.each(rank.tiers, function(i, tier){
-                  if (tier.id == val.player.PreviousCsr.Tier) {
-                    val.player.PreviousCSRIcon = tier.iconImageUrl;
-                  }
-                })
-              }
-            })
-          }
-
+          // Check the current CSR so we can measure progress and gather their
+          // rank name.
           if (val.player.CurrentCsr != null) {
             $.each(rankingData, function(i, rank){
               if (rank.id == val.player.CurrentCsr.DesignationId) {
