@@ -1,5 +1,5 @@
 /**
- * Javascript file for equalizing the heights of the product tiles.
+ * Javascript file for halo medals app.
  */
 
 (function ($) {
@@ -65,7 +65,11 @@
     // Fetch the list of maps available in the game. We need this data
     // to compare our match Map ID to it's corresponding map later on.
     $.ajax({
-      url: "http://www.halomedals.io/json/maps.json",
+      url: "https://www.haloapi.com/metadata/h5/metadata/maps",
+      beforeSend: function(xhrObj) {
+        // Request headers
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+      },
       type: "GET",
       dataType: "json",
 
@@ -77,7 +81,7 @@
 
 
   function fetchMedals(map_data) {
-    $.jsonp({
+    $.ajax({
       url: "https://www.haloapi.com/metadata/h5/metadata/medals",
       beforeSend: function(xhrObj) {
         // Request headers
@@ -94,7 +98,11 @@
 
   function fetchWeapons() {
     $.ajax({
-      url: "http://www.halomedals.io/json/weapons.json",
+      url: "https://www.haloapi.com/metadata/h5/metadata/weapons",
+      beforeSend: function(xhrObj) {
+        // Request headers
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+      },
       type: "GET",
       dataType: "json",
 
@@ -105,11 +113,11 @@
   }
 
   function fetchCSR() {
-    $.jsonp({
+    $.ajax({
       url: "https://www.haloapi.com/metadata/h5/metadata/csr-designations",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
       },
       type: "GET",
       dataType: "json",
@@ -130,11 +138,11 @@
   function fetchMatches(map_data, medal_data) {
     // Fetch the match history for the entered gamertag.
 
-    $.jsonp({
+    $.ajax({
       url: "https://www.haloapi.com/stats/h5/players/" + safeGamertag + "/matches?modes=" + selectedMode + "&start=" + resultCount + "&count=3",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
       },
       type: "GET",
       dataType: "json",
@@ -191,11 +199,11 @@
 
   function FetchMatchDetails(matchId, map_data, medal_data, gameMode, gameDate) {
 
-    $.jsonp({
+    $.ajax({
       url: "https://www.haloapi.com/stats/h5/" + gameMode + "/matches/" + matchId,
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
       },
       type: "GET",
       dataType: "json",
@@ -375,11 +383,11 @@
           // base map. So we need to check what the variant is, otherwise
           // it just dispays as "Breakout Arena".
           if (val.MapId === "c7edbf0f-f206-11e4-aa52-24be05e24f7e") {
-            $.jsonp({
+            $.ajax({
               url: "https://www.haloapi.com/metadata/h5/metadata/map-variants/" + val.MapVariantId,
               beforeSend: function(xhrObj) {
                 // Request headers
-                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
               },
               type: "GET",
               dataType: "json",
