@@ -68,7 +68,7 @@
       url: "https://www.haloapi.com/metadata/h5/metadata/maps",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -85,7 +85,7 @@
       url: "https://www.haloapi.com/metadata/h5/metadata/medals",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -101,7 +101,7 @@
       url: "https://www.haloapi.com/metadata/h5/metadata/weapons",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -117,7 +117,7 @@
       url: "https://www.haloapi.com/metadata/h5/metadata/csr-designations",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -142,7 +142,7 @@
       url: "https://www.haloapi.com/stats/h5/players/" + safeGamertag + "/matches?modes=" + selectedMode + "&start=" + resultCount + "&count=3",
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -203,7 +203,7 @@
       url: "https://www.haloapi.com/stats/h5/" + gameMode + "/matches/" + matchId,
       beforeSend: function(xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
       },
       type: "GET",
       dataType: "json",
@@ -387,7 +387,7 @@
               url: "https://www.haloapi.com/metadata/h5/metadata/map-variants/" + val.MapVariantId,
               beforeSend: function(xhrObj) {
                 // Request headers
-                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","adb9ae6a4e454200ac1d1093af6b29f1");
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","[your-key]");
               },
               type: "GET",
               dataType: "json",
